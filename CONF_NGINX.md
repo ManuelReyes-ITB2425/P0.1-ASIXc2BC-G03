@@ -14,6 +14,9 @@ sudo yum install nginx -y
 sudo systemctl start nginx
 sudo systemctl enable nginx 
 ```
+<img width="604" height="265" alt="image" src="https://github.com/user-attachments/assets/8aec2add-618b-4af4-9707-a7ef7730b1b2" />
+
+<img width="604" height="250" alt="image" src="https://github.com/user-attachments/assets/26aa6884-56c4-43c5-9491-1d225eb87826" />
 
 Para poder trabajar con PHP, necesitamos instalarlo y también sus módulos necesarios.
 
@@ -34,6 +37,8 @@ Creamos la estructura del sitio web, guardaremos toda la configuración en el di
 ```bash
 sudo mkdir -p /var/www/extagram/uploads
 ```
+<img width="496" height="100" alt="image" src="https://github.com/user-attachments/assets/70c0f2db-6e07-4198-b9e0-72788a7aa1d3" />
+
 Crearemos y copiaremos el código en el directorio extagram. extagram.php, upload.php, style.css y preview.svg.
 
 ## 3. Configuración de Nginx
@@ -99,4 +104,5 @@ cd /var/www/extagram
 sudo chown -R nginx:nginx uploads/
 sudo chmod -R 775 uploads/
 ```
+<img width="475" height="64" alt="image" src="https://github.com/user-attachments/assets/e7ad8c3a-e2f2-4175-9efd-7b22aec52d94" />
 
