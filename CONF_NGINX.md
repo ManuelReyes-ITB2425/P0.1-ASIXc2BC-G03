@@ -15,7 +15,7 @@ sudo systemctl start nginx
 sudo systemctl enable nginx 
 ```
 
-Para poder trabajar con PHP, necesitamos instalarlo y sus modulos necesarios.
+Para poder trabajar con PHP, necesitamos instalarlo y también sus módulos necesarios.
 
 ```bash
 sudo dnf install php-fpm php-mysqlnd
@@ -34,7 +34,7 @@ Creamos la estructura del sitio web, guardaremos toda la configuración en el di
 ```bash
 sudo mkdir -p /var/www/extagram/uploads
 ```
-crearemos y copiaremos el codigo en el directorio extagram. extagram.php, upload.php, style.css y preview.svg.
+Crearemos y copiaremos el código en el directorio extagram. extagram.php, upload.php, style.css y preview.svg.
 
 ## 3. Configuración de Nginx
 Primero, configuraremos nginx.conf, dentro del bloque server, se define el root apuntando a /var/www/extagram. se establece extagram.php como página principal y se configura el bloque location ~ \.php$ para enviar los scripts PHP a PHP-FPM.
@@ -84,7 +84,7 @@ server {
     }
 ```
 
-Ahora, comprabamos sintaxis y recargamos Nginx. 
+Ahora, comprobamos sintaxis y recargamos Nginx. 
 ```bash
 sudo nginx -t
 sudo systemctl reload nginx
