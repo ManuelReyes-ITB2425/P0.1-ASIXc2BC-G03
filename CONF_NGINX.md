@@ -92,6 +92,8 @@ sudo systemctl reload nginx
 
 ### 3.1 Permisos 
 
+Ponemos los permisos necesarios para que Nginx no tenga problema para acceder al uploads. 
+
 ```bash
 cd /var/www/extagram
 sudo chown -R nginx:nginx uploads/
