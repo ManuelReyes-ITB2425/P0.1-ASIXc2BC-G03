@@ -1,5 +1,4 @@
 # P0.1-ASIXc2BC-G03
-***
 
 # Explicación
 En este archivo explicaremos qué herramientas hemos seleccionado para el proyecto y por qué. Expondremos para ello los puntos fuertes y débiles de las opciones disponibles.
