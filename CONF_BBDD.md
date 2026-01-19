@@ -36,6 +36,8 @@ Este apartado detalla el proceso de instalación de PHP y las pruebas necesarias
 ## 2. Instalación de PHP
 Para instalar PHP junto con los módulos comunes para trabajar con servidores web y bases de datos (como MariaDB), ejecuta:
 
+## 3. Implementacion de BBDD con servidor web NGINX
+
 ```bash
 # Instalamos PHP y extensiones necesarias
 sudo dnf install php php-common php-mysqli php-fpm php-cli -y
