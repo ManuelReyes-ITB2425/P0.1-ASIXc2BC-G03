@@ -1,0 +1,63 @@
+/* Configuración general del cuerpo de la página */
+body {
+    background: #fafafa;
+    font-family: sans-serif;
+    margin: 0;
+}
+
+/* Contenedor del formulario de subida */
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+    background: white;
+    border-bottom: 1px solid #dbdbdb;
+    padding: 8px;
+}
+
+/* Campos de texto */
+input[type=text] {
+    border: 1px solid #dbdbdb;
+    padding: 8px;
+    width: 300px;
+}
+
+/* Botón de envío (Submit) */
+input[type=submit] {
+    background: #0096f7;
+    color: white;
+    border: 0;
+    border-radius: 3px;
+    width: 300px;
+    padding: 8px;
+    cursor: pointer;
+}
+
+/* Ocultar el input de archivo nativo y preview */
+#file { display: none; }
+#preview { max-width: 300px; }
+
+/* Contenedor de cada publicación (Post) */
+.post {
+    max-width: 600px;
+    margin: 20px auto;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #dbdbdb;
+    border-radius: 3px;
+    margin-bottom: 24px;
+}
+
+/* Ajuste de imagen y texto dentro del post */
+.post img { 
+    max-width: 600px; 
+    width: 100%; 
+}
+
+.post p { 
+    padding: 16px; 
+    margin: 0; 
+}
