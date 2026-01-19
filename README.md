@@ -1,6 +1,4 @@
 # P0.1-ASIXc2BC-G03
-Aquí tienes el texto convertido a formato Markdown, organizado con encabezados, negritas y listas para facilitar su lectura:
-
 ***
 
 # Explicación
