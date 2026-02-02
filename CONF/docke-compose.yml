@@ -1,0 +1,83 @@
+version: '3.8'
+
+services:
+  # --- PROXY (S1) ---
+  s1-proxy:
+    image: nginx:alpine
+    container_name: s1_proxy
+    ports:
+      - "80:80"
+    volumes:
+      # Montamos configuración de proxy
+      - ./proxy/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - s2-app
+      - s3-app
+    networks:
+      - extagram-net
+
+  # --- BACKEND (S2, S3, S4) ---
+  s2-app:
+    image: php:fpm-alpine
+    container_name: s2_app
+    volumes:
+      # Montamos el código PHP para que lo ejecute
+      - ./src/html:/var/www/html
+    networks:
+      - extagram-net
+
+  s3-app:
+    image: php:fpm-alpine
+    container_name: s3_app
+    volumes:
+      - ./src/html:/var/www/html
+    networks:
+      - extagram-net
+
+  s4-upload:
+    image: php:fpm-alpine
+    container_name: s4_upload
+    volumes:
+      - ./src/html:/var/www/html
+      # Volumen compartido para guardar fotos
+      - ./uploads:/var/www/html/uploads
+    networks:
+      - extagram-net
+
+  # ---  DATABASE (S7) ---
+  s7-db:
+    image: mysql:5.7
+    container_name: s7_db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: extagram_db
+      MYSQL_USER: extagram_admin
+      MYSQL_PASSWORD: pass123
+    volumes:
+      # Inicialización automática de BBDD
+      - ./db/init:/docker-entrypoint-initdb.d
+    networks:
+      - extagram-net
+
+  # ---  STATIC & IMAGES (S5, S6) ---
+  s5-images:
+    image: nginx:alpine
+    container_name: s5_images
+    volumes:
+      # Sirve las fotos que subió S4
+      - ./uploads:/usr/share/nginx/html/uploads
+    networks:
+      - extagram-net
+
+  s6-static:
+    image: nginx:alpine
+    container_name: s6_static
+    volumes:
+      # Sirve CSS y SVG
+      - ./static:/usr/share/nginx/html
+    networks:
+      - extagram-net
+
+networks:
+  extagram-net:
+    driver: bridge
