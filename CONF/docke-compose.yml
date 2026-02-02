@@ -8,7 +8,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      # Montamos configuración de proxy
+      # Montamos la configuración de proxy
       - ./proxy/nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - s2-app
@@ -16,7 +16,7 @@ services:
     networks:
       - extagram-net
 
-  # --- BACKEND (S2, S3, S4) ---
+ # --- BACKEND (S2, S3, S4) ---
   s2-app:
     image: php:fpm-alpine
     container_name: s2_app
@@ -25,7 +25,7 @@ services:
       - ./src/html:/var/www/html
     networks:
       - extagram-net
-
+    command: /bin/sh -c "docker-php-ext-install mysqli && php-fpm"
   s3-app:
     image: php:fpm-alpine
     container_name: s3_app
@@ -33,7 +33,7 @@ services:
       - ./src/html:/var/www/html
     networks:
       - extagram-net
-
+    command: /bin/sh -c "docker-php-ext-install mysqli && php-fpm"
   s4-upload:
     image: php:fpm-alpine
     container_name: s4_upload
@@ -43,23 +43,25 @@ services:
       - ./uploads:/var/www/html/uploads
     networks:
       - extagram-net
-
-  # ---  DATABASE (S7) ---
+    command: /bin/sh -c "docker-php-ext-install mysqli && php-fpm"
+ # --- DATABASE (S7) ---
   s7-db:
-    image: mysql:5.7
+    image: mariadb:10.6   # Usamos una versión LTS estable
     container_name: s7_db
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: extagram_db
-      MYSQL_USER: extagram_admin
-      MYSQL_PASSWORD: pass123
+      # MariaDB acepta las variables MYSQL
+      MARIADB_ROOT_PASSWORD: rootpassword
+      MARIADB_DATABASE: extagram_db
+      MARIADB_USER: extagram_admin
+      MARIADB_PASSWORD: pass123
     volumes:
-      # Inicialización automática de BBDD
       - ./db/init:/docker-entrypoint-initdb.d
     networks:
-      - extagram-net
+      extagram-net:
+        aliases:
+          - db.extagram.itb
 
-  # ---  STATIC & IMAGES (S5, S6) ---
+  # --- STATIC & IMAGES (S5, S6) ---
   s5-images:
     image: nginx:alpine
     container_name: s5_images
@@ -69,15 +71,16 @@ services:
     networks:
       - extagram-net
 
-  s6-static:
+  s6-static:   # Nombre del servicio
     image: nginx:alpine
-    container_name: s6_static
+    container_name: s6_static  
     volumes:
-      # Sirve CSS y SVG
       - ./static:/usr/share/nginx/html
+      - ./uploads:/usr/share/nginx/html/uploads
     networks:
       - extagram-net
-
 networks:
   extagram-net:
     driver: bridge
+
+    
