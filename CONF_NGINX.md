@@ -107,7 +107,7 @@ sudo chmod -R 775 uploads/
 <img width="475" height="64" alt="image" src="https://github.com/user-attachments/assets/e7ad8c3a-e2f2-4175-9efd-7b22aec52d94" />
 
 
-# Configuració balanceig de carrga
+# Configuración balanceo de carga
 
 En el archivo de configuración de Nginx del Proxy (S1), se definieron grupos de servidores (upstream) para permitir la escalabilidad horizontal. Esto permite que si un servidor de aplicación cae, el otro siga respondiendo, y distribuye la carga mediante algoritmo Round-Robin por defecto.
 
