@@ -106,3 +106,68 @@ sudo chmod -R 775 uploads/
 ```
 <img width="475" height="64" alt="image" src="https://github.com/user-attachments/assets/e7ad8c3a-e2f2-4175-9efd-7b22aec52d94" />
 
+
+# Configuració balanceig de carrga
+
+En el archivo de configuración de Nginx del Proxy (S1), se definieron grupos de servidores (upstream) para permitir la escalabilidad horizontal. Esto permite que si un servidor de aplicación cae, el otro siga respondiendo, y distribuye la carga mediante algoritmo Round-Robin por defecto.
+
+```bash
+nano proxy/nginx.conf
+```
+
+## Principales Responsabilidades
+
+*   **Balanceo de Carga (Load Balancing):**
+    *   Define un grupo (*upstream*) llamado `backend_pool`.
+    *   Distribuye las peticiones de la aplicación principal (`extagram.php`) entre dos contenedores réplica: `s2_app` y `s3_app` (puerto `9000`).
+
+*   **Segregación de Servicios:**
+    *   **Subidas (Uploads):** Las peticiones a `/upload.php` se enrutan exclusivamente al contenedor `s4_upload`. Esto aísla el proceso de subida de archivos pesados para no bloquear la navegación general.
+    *   **Contenido Estático:** Los archivos de recursos (`.css`, `.png`, etc.) y el directorio `/uploads/` son servidos directamente por el contenedor `s6_static`, liberando a los procesadores PHP de esta carga.
+
+*   **Protocolos:**
+    *   Utiliza el protocolo **FastCGI** para comunicarse con los contenedores PHP.
+    *   Utiliza **HTTP** (`proxy_pass`) para comunicarse con el servidor de estáticos.
+
+```bash
+upstream backend_pool {
+    server s2_app:9000;
+    server s3_app:9000;
+}
+
+server {
+    listen 80;
+    server_name localhost;
+
+    error_log  /var/log/nginx/error.log warn;
+    access_log /var/log/nginx/access.log;
+
+    location ~* \.(css|svg|jpg|jpeg|png|gif|ico)$ {
+        proxy_pass http://s6_static;
+    }
+
+    location = /upload.php {
+        include fastcgi_params;
+        fastcgi_pass s4_upload:9000;
+        fastcgi_param SCRIPT_FILENAME /var/www/html/upload.php;
+    }
+
+    location / {
+        include fastcgi_params;
+        fastcgi_pass backend_pool;
+        fastcgi_param SCRIPT_FILENAME /var/www/html/extagram.php;
+    }
+
+    location /uploads/ {
+        proxy_pass http://s6_static;
+    }
+}
+
+```
+
+<img width="512" height="125" alt="image" src="https://github.com/user-attachments/assets/dcdd38e5-9e7c-4457-a885-198cb1bc8b09" />
+
+Ya podemos levantar el contenedor:
+```bash
+docker-compose up -d
+```
