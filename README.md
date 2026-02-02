@@ -1,6 +1,13 @@
 # P0.1-ASIXc2BC-G03
 ***
 
+# Diagrama de Red
+
+En este diagrama de red se puede observar cómo hemos escalado el proyecto, así como la información relevante de cada uno de los servidores y sus respectivas características.
+
+<img width="608" height="626" alt="image" src="https://github.com/user-attachments/assets/90715c77-47da-4ea4-95d8-46543a8ad92a" />
+
+
 # Funcionamiento de Extagram
 
 En este archivo veremos cómo funciona Extagram desde el punto de vista de un cliente para que pueda entender cómo funciona y lo pueda utilizar sin ningún problema.
