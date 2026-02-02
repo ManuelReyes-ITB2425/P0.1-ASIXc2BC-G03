@@ -3,7 +3,7 @@
 
 # Diagrama de Red
 
-En este diagrama de red se puede observar cómo hemos escalado el proyecto, así como la información relevante de cada uno de los servidores y sus respectivas características.
+En este diagrama de red se puede observar cómo hemos estructurado el proyecto, así como la información relevante de cada uno de los servidores y sus respectivas características.
 
 <img width="608" height="626" alt="image" src="https://github.com/user-attachments/assets/90715c77-47da-4ea4-95d8-46543a8ad92a" />
 
