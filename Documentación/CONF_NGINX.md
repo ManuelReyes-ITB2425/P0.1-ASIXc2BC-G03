@@ -46,48 +46,7 @@ Primero, configuraremos nginx.conf, dentro del bloque server, se define el root 
 ```bash
 sudo nano  /etc/nginx/nginx.conf
 ```
-
-```bash
-server {
-        listen       80;
-        listen       [::]:80;
-        server_name  _;
-
-        # 1. CAMBIO DE RUTA: Apunta a tu carpeta creada
-        root         /var/www/extagram;
-
-        # 2. INDICE: Añade extagram.php al principio
-        index extagram.php index.html index.htm;
-
-        # Load configuration files for the default server block.
-        include /etc/nginx/default.d/*.conf;
-
-        location / {
-            try_files $uri $uri/ =404;
-        }
-
-        # 3. CONFIGURACIÓN PHP (Necesaria para AWS/Amazon Linux)
-        location ~ \.php$ {
-            # Esta línea pasa el script a PHP-FPM
-            # EN AWS/AMAZON LINUX, suele ser este socket:
-            fastcgi_pass unix:/run/php-fpm/www.sock;
-
-            # Si el de arriba falla, prueba: fastcgi_pass 127.0.0.1:9000;
-
-            fastcgi_index extagram.php;
-            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-            include fastcgi_params;
-        }
-
-        error_page 404 /404.html;
-        location = /404.html {
-        }
-
-	error_page 500 502 503 504 /50x.html;
-        location = /50x.html {
-        }
-    }
-```
+Consulta el codigo [nginx.conf](../CONF/nginx.conf)
 
 Ahora, comprobamos sintaxis y recargamos Nginx. 
 ```bash
@@ -109,7 +68,7 @@ sudo chmod -R 775 uploads/
 
 # Configuración balanceo de carga
 
-En el archivo de configuración de Nginx del Proxy (S1), se definieron grupos de servidores (upstream) para permitir la escalabilidad horizontal. Esto permite que si un servidor de aplicación cae, el otro siga respondiendo, y distribuye la carga mediante algoritmo Round-Robin por defecto.
+Previamente configurado los contenedores en Docker, podemos trabajar sin necesidad de instalarlo todo de nuevo, la explicación esta: [Docker](). En el archivo de configuración de Nginx del Proxy (S1), se definieron grupos de servidores (upstream) para permitir la escalabilidad horizontal. Esto permite que si un servidor de aplicación cae, el otro siga respondiendo, y distribuye la carga mediante algoritmo Round-Robin por defecto.
 
 ```bash
 nano proxy/nginx.conf
@@ -165,9 +124,11 @@ server {
 
 ```
 
-<img width="512" height="125" alt="image" src="https://github.com/user-attachments/assets/dcdd38e5-9e7c-4457-a885-198cb1bc8b09" />
-
 Ya podemos levantar el contenedor:
 ```bash
 docker-compose up -d
 ```
+Podemos comprobar, que cada vez que reinciamos los contenedores, hay ocasiones que el servicio se mantiene gracias a que se van pasando el servicio el uno al otro, cumpliendose asi nuestro objetivo.
+
+<img width="512" height="125" alt="image" src="https://github.com/user-attachments/assets/dcdd38e5-9e7c-4457-a885-198cb1bc8b09" />
+
