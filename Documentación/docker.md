@@ -156,3 +156,4 @@ networks:
 Todos los contenedores se comunican en una red privada `bridge`. Solo el puerto 80 del proxy (S1) está expuesto al exterior. 
 
 ---
+El codigo completo esta en: [docke-compose.yml](../CONF/docke-compose.yml)
