@@ -64,7 +64,7 @@ Este archivo define la orquestación completa de la infraestructura de microserv
       - extagram-net
 ```
 
-### Justificación Técnica
+### Justificación
 *   **API Gateway:** Usamos Nginx como Proxy Inverso. Su función no es procesar PHP, sino recibir todo el tráfico de internet y decidir a qué contenedor interno enviarlo (balanceo de carga o contenido estático).
 *   **Seguridad y Rendimiento:** El uso de la versión `alpine` reduce drásticamente la superficie de ataque y el consumo de recursos.
 
@@ -122,7 +122,7 @@ Este archivo define la orquestación completa de la infraestructura de microserv
           - db.extagram.itb      # Alias DNS interno
 ```
 
-### Justificación Técnica
+### Justificación
 *   **Motor:** Se elige MariaDB por ser un fork *open-source* totalmente compatible con MySQL.
 *   **Networking:** El uso de **aliases** permite que el código PHP conecte a `db.extagram.itb` en lugar de a una IP fija, desacoplando la configuración de red del código fuente.
 
@@ -138,7 +138,7 @@ Estos servicios descargan de trabajo a los servidores PHP sirviendo archivos dir
       - ./uploads:/usr/share/nginx/html/uploads # Acceso de LECTURA a fotos subidas
 ```
 
-### Justificación Técnica
+### Justificación
 Nginx es mucho más eficiente que PHP sirviendo archivos estáticos (.jpg, .png, .css).
 *   **S5 (Images):** Sirve exclusivamente el contenido generado por los usuarios. Comparte el volumen con **S4**, por lo que visualiza al instante lo que S4 sube.
 *   **S6 (Static):** Sirve activos fijos del frontend (CSS, JS, Logos) desde `./static`.
