@@ -21,7 +21,7 @@ Este script es el núcleo de la gestión de archivos. Realiza dos funciones crí
 * **Gestión de archivos:** Procesa la subida de imágenes.
 * **Sincronización:** Vincula los datos con la **Base de Datos**. Al guardar la información en el directorio `uploads` y en la BD simultáneamente, se garantiza un sistema protegido ante caídas.
 
-[Ver el documento de configuración](CONF/upload.php)
+[Ver el archivo upload.php](upload.php)
 ---
 
 ## 🛠️ Explicación de Parámetros (Docker)
