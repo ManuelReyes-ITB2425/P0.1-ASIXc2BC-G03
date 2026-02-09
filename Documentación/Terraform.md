@@ -1,12 +1,12 @@
 # 1. Objetivo del Despliegue e Infraestructura
 
 ## 1.1. Propósito General
-Migración y despliegue de la aplicación distribuida "Extagram" desde un entorno local hacia **Amazon Web Services (AWS)**.
+Migración y despliegue de la aplicación distribuida "Extagram" desde isard hacia **Amazon Web Services (AWS)**.
 
 La arquitectura de microservicios consta de **7 contenedores Docker** (balanceadores Nginx, procesadores PHP y bases de datos MySQL), configurados para ser accesibles públicamente vía internet, asegurando la persistencia de datos y la comunicación entre servicios.
 
 ## 1.2. Estrategia de Implementación: Infraestructura como Código (IaC)
-Se implementa una estrategia de IaC utilizando **Terraform** bajo un enfoque de **Aprovisionamiento con Bootstrapping**, evitando la configuración manual:
+Se implementa una estrategia de IaC utilizando Terraform bajo un enfoque de **Aprovisionamiento con Bootstrapping**, evitando la configuración manual:
 
 *   **Orquestación de Infraestructura:** Terraform define y provisiona los recursos en la nube (Instancia EC2, Security Groups, Key Pairs).
 *   **Configuración Automática:** Mediante scripts *User Data*, la instancia se autoconfigura al inicio: instalación del motor Docker, clonado del repositorio y ejecución de los servicios definidos en `docker-compose`.
@@ -59,4 +59,5 @@ Para resolver la incompatibilidad y asegurar la ejecución correcta del aprovisi
 
 **Resultado**
 La alineación entre el sistema operativo y la lógica de aprovisionamiento permitió completar el proceso de *bootstrapping*. La aplicación Extagram inicia sus servicios automáticamente tras el despliegue de la instancia, sin requerir intervención manual.
+
 
