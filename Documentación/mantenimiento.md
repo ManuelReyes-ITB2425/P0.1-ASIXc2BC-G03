@@ -1,4 +1,4 @@
-Mantenimiento del Sistema
+# Mantenimiento del Sistema
 
 Este documento detalla los procedimientos de diagnóstico, resolución de problemas comunes y tareas de mantenimiento rutinario para el entorno de despliegue.
 
@@ -7,6 +7,7 @@ Este documento detalla los procedimientos de diagnóstico, resolución de proble
 El primer paso ante cualquier fallo de servicio (ej. Error HTTP 500, tiempos de espera agotados) es la revisión de los logs del orquestador de contenedores.
 
 **Síntoma:** La aplicación devuelve errores internos o no responde.
+
 **Acción:** Consultar los logs en tiempo real de los servicios implicados.
 
 ```bash
@@ -27,6 +28,7 @@ docker-compose logs -f s2_app s7_db
 ## 2. Problemas de Permisos (Escritura en Volúmenes)
 
 **Síntoma:** Las subidas de archivos fallan. La aplicación muestra el error `Permission denied` o los archivos se guardan con un tamaño de 0 bytes.
+
 **Causa:** El usuario del contenedor encargado de la ejecución (por defecto `www-data` con UID 33) no tiene permisos de escritura sobre el directorio montado en el *host*.
 
 **Solución:**
@@ -50,6 +52,7 @@ docker-compose logs -f s2_app s7_db
 ## 3. Errores de Enrutamiento estático (HTTP 404 en Imágenes)
 
 **Síntoma:** El archivo físico existe en el directorio de almacenamiento, pero el navegador devuelve un error `404 Not Found` al intentar renderizarlo.
+
 **Diagnóstico:** Inspeccionar la red mediante las herramientas de desarrollo del navegador. Si la URL es correcta pero el servidor devuelve 404, existe un error en las reglas del proxy inverso.
 
 **Solución:**
@@ -90,6 +93,7 @@ docker-compose logs -f s2_app s7_db
 ## 5. Depuración de Provisionamiento en Entornos Cloud (AWS)
 
 **Síntoma:** La instancia EC2 (o equivalente) inicia correctamente, pero la IP pública no responde al tráfico HTTP/HTTPS.
+
 **Causa probable:** Fallo durante la ejecución del script de inicio (User Data / Cloud-Init), como errores en el gestor de paquetes, fallos de clonación de Git o problemas en la instalación de Docker.
 
 **Acción:** Inspeccionar el log de salida del provisionamiento de la instancia.
@@ -117,3 +121,4 @@ Compresión del directorio de almacenamiento persistente.
 ```bash
 tar -czvf backup_uploads_$(date +%F).tar.gz ./uploads
 ```
+
