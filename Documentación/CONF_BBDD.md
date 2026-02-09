@@ -91,3 +91,7 @@ Todos los datos publicados en la pagina web, tanto las imagenes como los pies de
 
 Podemos apreciar como todos los datos se almacenan de manera segura en la base de datos interna.
 
+En la imagen podemos ver como se ha gestionado el orden de la base de datos y el almacenamiento de las imagenes 
+
+<img width="727" height="621" alt="Captura de pantalla de 2026-01-26 16-26-34" src="https://github.com/user-attachments/assets/63f71959-51fa-4b26-a48f-ab2a56e2ded9" />
+
