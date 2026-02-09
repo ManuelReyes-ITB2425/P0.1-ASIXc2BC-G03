@@ -1,4 +1,4 @@
-# Servidor S4 - Documentación de Servicio
+# Servidor S4
 
 En esta documentación se detallan los archivos y configuraciones realizados para que el **Servicio 4 (S4)** funcione correctamente.
 
@@ -47,4 +47,35 @@ Es necesario configurar correctamente los **permisos en el directorio `uploads`*
 Si no se otorgan los permisos de lectura y escritura adecuados al usuario que ejecuta PHP, el sistema no podrá gestionar las imágenes, resultando en errores de ejecución en la plataforma.
 
 ---
-*Documentación generada para el despliegue del proyecto Extagram.*
+
+# Servidor S5
+
+En esta documentación se detallan los archivos y configuraciones necesarios para lograr que el **Servicio 5 (S5)** funcione correctamente.
+
+---
+
+## 🖼️ Función
+La función principal del servidor S5 es **servir las imágenes** que han sido cargadas previamente por el Servicio 4 en el directorio compartido `uploads`. Actúa como el servidor de entrega de contenido estático (fotos) de Extagram.
+
+---
+
+## 🐳 Docker-compose.yml
+El archivo más importante para el funcionamiento de este servicio es el `docker-compose.yml` (archivo principal de Docker). 
+
+Aunque este archivo contiene la configuración de toda la infraestructura, para el S5 nos centramos en las siguientes directivas:
+
+<img width="527" height="216" alt="image" src="https://github.com/user-attachments/assets/4c1de136-91c5-4c8b-9d14-f13c9a424072" />
+
+### Explicación de parámetros:
+
+| Parámetro | Descripción |
+| :--- | :--- |
+| **s5-images** | Establece el nombre de la directiva del servicio. Todo lo definido bajo este parámetro se aplica exclusivamente a este contenedor. |
+| **image** | Utiliza `nginx:alpine`. Se usa **Nginx** para servir contenido estático y **Alpine** por ser una imagen extremadamente ligera y óptima para esta tarea. |
+| **container_name** | Define el nombre del contenedor en ejecución como `s5_images`. |
+| **volumes** | Mapea y sirve la carpeta `uploads`. Aquí es donde se localizan todas las fotos subidas a la plataforma. |
+| **networks** | Conecta el contenedor a la red compartida `extagram-net`. |
+
+---
+
+
