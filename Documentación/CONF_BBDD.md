@@ -95,3 +95,10 @@ En la imagen podemos ver como se ha gestionado el orden de la base de datos y el
 
 <img width="727" height="621" alt="Captura de pantalla de 2026-01-26 16-26-34" src="https://github.com/user-attachments/assets/63f71959-51fa-4b26-a48f-ab2a56e2ded9" />
 
+## Base de datos final
+
+En esta imagen podemos ver como ha quedado finalmente la base de datos y los campos que almaceamos de cada una de las imagenes que se suben a nuestra web.
+
+<img width="736" height="486" alt="image" src="https://github.com/user-attachments/assets/8cecf63d-f490-4068-b800-acc3d9d77ae9" />
+
+
