@@ -77,5 +77,41 @@ Aunque este archivo contiene la configuración de toda la infraestructura, para 
 | **networks** | Conecta el contenedor a la red compartida `extagram-net`. |
 
 ---
+# Servidor S6
+
+En esta documentación se detallan los archivos y configuraciones necesarios para el correcto funcionamiento del **Servicio 6 (S6)**.
+
+---
+
+## 🎨 Función
+La función principal del servidor S6 es servir los archivos estáticos de la interfaz, específicamente:
+* **`style.css`**: Define la hoja de estilos visual de la web.
+* **`preview.svg`**: Proporciona elementos gráficos para la visualización.
+
+En resumen, este servidor es el responsable de renderizar la **parte estática** de la página web para que el usuario pueda ver el diseño correctamente.
+
+---
+
+## 🐳 Docker-compose.yml
+Al igual que en los servicios anteriores, la configuración reside en el archivo global de orquestación.
+
+> [!TIP]
+> Puedes consultar los archivos estáticos en la carpeta de configuración: 
+> [📄 Ver preview.svg](../CONF/preview.svg) | [📄 Ver style.css](../CONF/style.css)
+
+### Explicación de parámetros:
+
+<img width="584" height="173" alt="image" src="https://github.com/user-attachments/assets/65985056-d828-4ddb-b8f3-42df38c9220c" />
+
+| Parámetro | Descripción |
+| :--- | :--- |
+| **s6-static** | Nombre identificador de la directiva para el servicio estático. |
+| **image** | Utiliza `nginx:alpine`. El servidor **Nginx** es el estándar para servir archivos estáticos, y la versión **Alpine** garantiza un consumo mínimo de recursos. |
+| **container_name** | Establece el nombre del contenedor en el sistema como `s6_static`. |
+| **volumes** | Se configuran dos rutas: una para el despliegue del **HTML** y otra para conectar con la carpeta **uploads**, permitiendo la lectura de recursos compartidos. |
+| **networks** | El contenedor se integra en la red común `extagram-net`. |
+
+---
+*Documentación generada para el despliegue del proyecto Extagram.*
 
 
