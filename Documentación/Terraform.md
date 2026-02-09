@@ -60,4 +60,6 @@ Para resolver la incompatibilidad y asegurar la ejecución correcta del aprovisi
 **Resultado**
 La alineación entre el sistema operativo y la lógica de aprovisionamiento permitió completar el proceso de *bootstrapping*. La aplicación Extagram inicia sus servicios automáticamente tras el despliegue de la instancia, sin requerir intervención manual.
 
+Nuestro código está en el siguiente archivo: [Codigo Terraform](../CONF/main.tf)
 
+El script corregido que hemos utilizado es: [setup.sh](../CONF/setup.sh)
