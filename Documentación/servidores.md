@@ -98,7 +98,7 @@ Al igual que en los servicios anteriores, la configuración reside en el archivo
 
 > [!TIP]
 > Puedes consultar los archivos estáticos en la carpeta de configuración: 
-> [📄 Ver preview.svg](../CONF/preview.svg) | [📄 Ver style.css](../CONF/style.css)
+> [📄 Ver preview.svg](../CONF/preview.vsg) | [📄 Ver style.css](../CONF/style.css)
 
 ### Explicación de parámetros:
 
