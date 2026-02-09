@@ -25,3 +25,38 @@ El alcance técnico abarca:
 *   **Red y Seguridad:** Configuración de Security Groups para tráfico HTTP (Puerto 80) y SSH (Puerto 22).
 *   **Aplicación:** Despliegue de la pila de contenedores de la arquitectura Extagram.
 *   **Persistencia:** Gestión de volúmenes para la base de datos y almacenamiento de archivos multimedia.
+
+
+
+
+## 2. Análisis del Problema de Aprovisionamiento
+
+### 2.1. Descripción de la Incidencia
+Durante el despliegue automatizado, se detectó un fallo en la fase de *bootstrapping*. A pesar de que Terraform confirmó la creación exitosa de la infraestructura y la instancia EC2 figuraba en estado `Running` en la consola de AWS, el servicio Extagram no se encontraba operativo.
+
+La inspección de la instancia mediante SSH reveló el siguiente estado:
+*   **Ausencia de dependencias:** Docker y Docker Compose no estaban instalados.
+*   **Código fuente:** El repositorio de la aplicación no se había clonado.
+*   **Estado del sistema:** El sistema operativo estaba funcional, pero el aprovisionamiento de aplicaciones no se había ejecutado.
+
+### 2.2. Diagnóstico Técnico (Causa Raíz)
+La revisión de los logs del sistema, específicamente `/var/log/cloud-init-output.log`, evidenció una incompatibilidad crítica entre la definición de la infraestructura y el script de aprovisionamiento:
+
+*   **Definición en Terraform (`main.tf`):** Instancia configurada para desplegar una AMI basada en **Ubuntu Server 22.04 LTS** (`ami-0c7...`).
+*   **Script de usuario (`user_data`):** Contenía comandos de gestión de paquetes pertenecientes a la familia RedHat/Amazon Linux (`yum update`, `yum install`).
+
+**Detalle del conflicto**
+Ubuntu utiliza `apt` como gestor de paquetes nativo. Al ejecutarse el script de inicio (`setup.sh`), el intérprete falló al invocar la instrucción `yum`, comando inexistente en distribuciones Debian/Ubuntu. Esto generó un error de tipo "command not found", interrumpiendo la ejecución del script de forma inmediata sin reportar el fallo al proceso padre de Terraform.
+
+
+### 2.3. Solución Implementada
+Para resolver la incompatibilidad y asegurar la ejecución correcta del aprovisionamiento, se procedió a estandarizar el entorno utilizando el ecosistema nativo de AWS.
+
+**Acciones realizadas**
+
+*   **Sustitución de la AMI:** Se modificó la configuración en Terraform para retirar la dependencia de Ubuntu. En su lugar, se implementó un bloque `data "aws_ami"` encargado de localizar y seleccionar dinámicamente la última versión estable de **Amazon Linux 2023**.
+*   **Validación de compatibilidad:** Se confirmó la validez del script de `user_data` existente. Al utilizar Amazon Linux 2023, los comandos `yum` (alias del gestor `dnf` en esta versión) se ejecutan nativamente, eliminando el conflicto de dependencias.
+
+**Resultado**
+La alineación entre el sistema operativo y la lógica de aprovisionamiento permitió completar el proceso de *bootstrapping*. La aplicación Extagram inicia sus servicios automáticamente tras el despliegue de la instancia, sin requerir intervención manual.
+
