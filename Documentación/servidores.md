@@ -41,8 +41,9 @@ Este script es el núcleo de la gestión de archivos. Realiza dos funciones crí
 
 ### Permisos del Directorio
 Es necesario configurar correctamente los **permisos en el directorio `uploads`**. 
-<img width="573" height="51" alt="image" src="https://github.com/user-attachments/assets/db721f3e-92d5-4bec-80a0-17faeaa0cddc" />
-<img width="548" height="224" alt="image" src="https://github.com/user-attachments/assets/05cbc60a-a817-48dd-865e-74696f318f5f" />
+<img width="571" height="47" alt="image" src="https://github.com/user-attachments/assets/c5455fb0-2bcb-42b0-942a-a6337f423766" />
+<img width="538" height="222" alt="image" src="https://github.com/user-attachments/assets/f0c7e729-7e96-4278-8ace-df6e39def2bd" />
+
 
 Si no se otorgan los permisos de lectura y escritura adecuados al usuario que ejecuta PHP, el sistema no podrá gestionar las imágenes, resultando en errores de ejecución en la plataforma.
 
