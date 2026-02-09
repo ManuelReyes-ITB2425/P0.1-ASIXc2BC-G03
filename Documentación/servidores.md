@@ -13,6 +13,7 @@ El servidor S4 implementa el servicio **PHP-FPM** para ejecutar el script `uploa
 
 ### 1. docker-compose.yml
 Es el archivo de orquestación global. Define los parámetros necesarios para que el contenedor se despliegue con los recursos y redes adecuados.
+
 <img width="596" height="191" alt="image" src="https://github.com/user-attachments/assets/fdfb1395-4cfd-474f-8282-54c43c226de7" />
 
 ### 2. upload.php
