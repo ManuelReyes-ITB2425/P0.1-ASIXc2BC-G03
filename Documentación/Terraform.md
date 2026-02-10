@@ -1,22 +1,20 @@
 # 1. Objetivo del Despliegue e Infraestructura
 
 ## 1.1. Propósito General
-Migración y despliegue de la aplicación distribuida "Extagram" desde isard hacia **Amazon Web Services (AWS)**.
-
-La arquitectura de microservicios consta de **7 contenedores Docker** (balanceadores Nginx, procesadores PHP y bases de datos MySQL), configurados para ser accesibles públicamente vía internet, asegurando la persistencia de datos y la comunicación entre servicios.
+Migración y despliegue de la aplicación distribuida "Extagram" desde isard hacia **Amazon Web Services (AWS)**, habiamos planteado primero hacerlo en isard, pero nos encontramos con la siguiente casuistica. ¿Como pasamos todo sin hacerlo manualmente en AWS?.
 
 ## 1.2. Estrategia de Implementación: Infraestructura como Código (IaC)
-Se implementa una estrategia de IaC utilizando Terraform bajo un enfoque de **Aprovisionamiento con Bootstrapping**, evitando la configuración manual:
+Se implementa una estrategia de IaC utilizando Terraform, evitando la configuración manual:
 
 *   **Orquestación de Infraestructura:** Terraform define y provisiona los recursos en la nube (Instancia EC2, Security Groups, Key Pairs).
-*   **Configuración Automática:** Mediante scripts *User Data*, la instancia se autoconfigura al inicio: instalación del motor Docker, clonado del repositorio y ejecución de los servicios definidos en `docker-compose`.
+*   **Configuración Automática:** Mediante scripts, la instancia se autoconfigura al inicio: instalación del motor Docker, clonado del repositorio y ejecución de los servicios definidos en `docker-compose`.
 
 ## 1.3. Justificación Técnica
 La automatización del despliegue responde a los siguientes criterios de ingeniería:
 
 *   **Reproductibilidad:** Permite destruir y recrear el entorno idénticamente en minutos, mitigando errores humanos.
 *   **Documentación como Código:** Los archivos de configuración (`main.tf` y `setup.sh`) actúan como la definición técnica real de la infraestructura.
-*   **Preparación para Escalabilidad:** Establece la base de código necesaria para la implementación de seguridad avanzada y alta disponibilidad en la fase **P0.2**.
+*   **Preparación para Escalabilidad:** Establece la base de código necesaria para la implementación de seguridad avanzada y alta disponibilidad en la siguiente parte del proyecto.
 
 ## 1.4. Alcance del Despliegue
 El alcance técnico abarca:
@@ -32,7 +30,7 @@ El alcance técnico abarca:
 ## 2. Análisis del Problema de Aprovisionamiento
 
 ### 2.1. Descripción de la Incidencia
-Durante el despliegue automatizado, se detectó un fallo en la fase de *bootstrapping*. A pesar de que Terraform confirmó la creación exitosa de la infraestructura y la instancia EC2 figuraba en estado `Running` en la consola de AWS, el servicio Extagram no se encontraba operativo.
+Durante el despliegue automatizado, se detectó un fallo en el despliegue de los contenedores. A pesar de que Terraform confirmó la creación exitosa de la infraestructura y la instancia EC2 figuraba en estado `Running` en la consola de AWS, el servicio Extagram no se encontraba operativo.
 
 La inspección de la instancia mediante SSH reveló el siguiente estado:
 *   **Ausencia de dependencias:** Docker y Docker Compose no estaban instalados.
@@ -63,3 +61,4 @@ La alineación entre el sistema operativo y la lógica de aprovisionamiento perm
 Nuestro código está en el siguiente archivo: [Codigo Terraform](../CONF/main.tf)
 
 El script corregido que hemos utilizado es: [setup.sh](../CONF/setup.sh)
+
