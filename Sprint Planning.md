@@ -1,4 +1,4 @@
-# 🚀 Sprint 1: Planificación e Infraestructura Base
+# 🚀 Sprint 1:
 
 Registro de actividades correspondiente a la fase inicial del proyecto.
 
@@ -41,7 +41,7 @@ Registro de actividades correspondiente a la fase inicial del proyecto.
 | :--- | :--- | :--- |
 | **Sprint 1** | ✅ Finalizado | Arquitectura base. |
 
-# SPRINT 2
+# 🚀 SPRINT 2
 
 ---
 
@@ -99,7 +99,7 @@ Registro de actividades correspondiente a la fase inicial del proyecto.
 | **Sprint 1** | ✅ Finalizado | Arquitectura base. |
 | **Sprint 2** | ✅ Finalizado | Docker, AWS y Documentación. |
 
-### 03/02/2026 | Inicio Sprint 3 y Verificación
+# 🚀 SPRINT 3
 * **Actividades:**
     * Inicio de la **documentación final** que engloba todo el desarrollo del proyecto.
     * Fase de **testing**: Verificación de que todos los servicios configurados funcionan correctamente y sin errores.
