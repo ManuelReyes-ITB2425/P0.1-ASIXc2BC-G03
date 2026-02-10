@@ -1,31 +1,49 @@
-# Registro de Actividades
+# 🚀 Sprint 1: Planificación e Infraestructura Base
 
-### 15/12/2025
-Procederemos con la preparación de **GitHub** y **ProofHub**, además de concretar la metodología de trabajo. Asimismo, definimos las tareas iniciales relativas a la elaboración de la documentación y nos tomamos un tiempo para volvernos a familiarizar con el entorno **AWS**.
+Registro de actividades correspondiente a la fase inicial del proyecto.
 
-### 16/12/2025
-Llevaremos a cabo la preparación y validación de las máquinas con el fin de evaluar su funcionamiento. En paralelo, seguiremos documentando la elección y el propósito de las tecnologías que se emplearán en el desarrollo.
+---
 
-***
+## 📅 Diciembre 2025
 
-### 12/01/2026
-Tras la reanudación de las clases después de las vacaciones de Navidad, se ha llevado a cabo una reunión de seguimiento. Se ha establecido la necesidad de:
-*   Concluir la redacción técnica.
-*   Examinar los parámetros de **Nginx**.
-*   Comenzar con la estructuración de la organización en **GitHub**.
-<img width="603" height="323" alt="image" src="https://github.com/user-attachments/assets/40e06085-cd3e-4721-a9e3-4b2510398997" />
+### 15/12/2025 | Organización y Entorno Cloud
+* **Gestión del proyecto:** Preparación de los espacios de trabajo en **GitHub** y **ProofHub**.
+* **Metodología:** Definición de la metodología de trabajo del equipo.
+* **AWS:** Sesión de familiarización con el entorno de Amazon Web Services y asignación de tareas iniciales de documentación.
 
-### 13/01/2026
-Hoy realizaremos la implementación de la base de datos en el servidor, el cual se encuentra funcionando. Aparte de esto:
-*   Se comienza con la documentación de lo hecho el día anterior con respecto al servidor **Nginx**.
-*   Se realizará una organización exhaustiva del **ProofHub** y **GitHub**.
-<img width="603" height="323" alt="image" src="https://github.com/user-attachments/assets/6f48b957-5a16-431d-84bf-240c392e6b37" />
-
-# SPRINT 2
+### 16/12/2025 | Validación de Sistemas
+* **Infraestructura:** Preparación y validación de máquinas virtuales para evaluar su correcto funcionamiento.
+* **Documentación:** Justificación técnica de la elección de tecnologías y definición del propósito de cada una en el proyecto.
 
 ---
 
 ## 📅 Enero 2026
+
+### 12/01/2026 | Retorno y Re-evaluación
+* **Reunión de seguimiento:** Puesta en común tras el periodo vacacional.
+* **Tareas técnicas:** * Revisión de parámetros de configuración en **Nginx**.
+    * Finalización de la redacción técnica pendiente.
+* **GitHub:** Inicio de la estructuración organizada del repositorio.
+
+<img width="601" height="317" alt="image" src="https://github.com/user-attachments/assets/121721c6-e770-42b7-aa54-e7a3a72afb84" />
+
+### 13/01/2026 | Implementación y Organización
+* **Servidor de Datos:** Implementación y puesta en marcha de la **base de datos** en el servidor.
+* **Documentación:** Registro técnico de la configuración de Nginx realizada el día anterior.
+* **Optimización:** Reorganización exhaustiva de los paneles de **ProofHub** y la estructura de carpetas en **GitHub**.
+
+<img width="600" height="319" alt="image" src="https://github.com/user-attachments/assets/14dd8ae1-aeb8-4db8-a9c8-532121be6b26" />
+
+---
+
+### 🚀 Resumen de Sprints
+| Sprint | Estado | Enfoque |
+| :--- | :--- | :--- |
+| **Sprint 1** | ✅ Finalizado | Arquitectura base. |
+
+# SPRINT 2
+
+---
 
 ### 19/01/2026 | Revisión Sprint 1 e Inicio Sprint 2
 * **Revisión con Sergi Grangel Massana:** * **Resultado:** En general bastante bien.
@@ -79,7 +97,7 @@ Hoy realizaremos la implementación de la base de datos en el servidor, el cual 
 | Sprint | Estado | Enfoque |
 | :--- | :--- | :--- |
 | **Sprint 1** | ✅ Finalizado | Arquitectura base. |
-| **Sprint 2** | 🔄 En curso | Docker, AWS y Documentación. |
+| **Sprint 2** | ✅ Finalizado | Docker, AWS y Documentación. |
 
 ### 03/02/2026 | Inicio Sprint 3 y Verificación
 * **Actividades:**
@@ -106,7 +124,9 @@ Hoy realizaremos la implementación de la base de datos en el servidor, el cual 
 
 ---
 
-### 🚀 Resumen del Sprint 3
-| Sprint | Estado | Enfoque Principal |
+### 🚀 Resumen de Sprints
+| Sprint | Estado | Enfoque |
 | :--- | :--- | :--- |
+| **Sprint 1** | ✅ Finalizado | Arquitectura base. |
+| **Sprint 2** | ✅ Finalizado | Docker, AWS y Documentación. |
 | **Sprint 3** | 🏁 Finalizado | Documentación final, Testing y Presentación. |
