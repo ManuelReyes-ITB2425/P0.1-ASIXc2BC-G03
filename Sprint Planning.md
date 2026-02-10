@@ -80,3 +80,33 @@ Hoy realizaremos la implementación de la base de datos en el servidor, el cual 
 | :--- | :--- | :--- |
 | **Sprint 1** | ✅ Finalizado | Arquitectura base. |
 | **Sprint 2** | 🔄 En curso | Docker, AWS y Documentación. |
+
+### 03/02/2026 | Inicio Sprint 3 y Verificación
+* **Actividades:**
+    * Inicio de la **documentación final** que engloba todo el desarrollo del proyecto.
+    * Fase de **testing**: Verificación de que todos los servicios configurados funcionan correctamente y sin errores.
+
+<img width="602" height="173" alt="image" src="https://github.com/user-attachments/assets/1f39c542-f1c9-4aa9-a695-07a4a5a97a6b" />
+
+### 09/02/2026 | Redacción y Revisión Técnica
+* **Progreso:**
+    * Continuación con la redacción detallada de la documentación de los días anteriores.
+    * **Revisión final:** Control de calidad de todo el material documentado para asegurar que esté listo para la presentación.
+    * **Objetivo:** Dejar el proyecto preparado para la entrega al profesorado.
+
+<img width="602" height="308" alt="image" src="https://github.com/user-attachments/assets/7de8e24a-8d5b-4d5e-a8f9-a2865e3ae198" />
+
+
+### 10/02/2026 | Auditoría Final y Presentación
+* **Hitos del día:**
+    * Revisión total y exhaustiva de la documentación generada.
+    * **Presentación:** Demostración del proyecto y de todo el trabajo realizado ante el profesor (sujeto a disponibilidad de tiempo).
+
+<img width="602" height="308" alt="image" src="https://github.com/user-attachments/assets/407a9579-e084-4643-9dbb-521a6bdbc181" />
+
+---
+
+### 🚀 Resumen del Sprint 3
+| Sprint | Estado | Enfoque Principal |
+| :--- | :--- | :--- |
+| **Sprint 3** | 🏁 Finalizado | Documentación final, Testing y Presentación. |
