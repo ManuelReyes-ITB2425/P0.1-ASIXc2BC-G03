@@ -56,9 +56,10 @@ Para resolver la incompatibilidad y asegurar la ejecución correcta del aprovisi
 *   **Validación de compatibilidad:** Se confirmó la validez del script de `user_data` existente. Al utilizar Amazon Linux 2023, los comandos `yum` (alias del gestor `dnf` en esta versión) se ejecutan nativamente, eliminando el conflicto de dependencias.
 
 **Resultado**
-La alineación entre el sistema operativo y la lógica de aprovisionamiento permitió completar el proceso de *bootstrapping*. La aplicación Extagram inicia sus servicios automáticamente tras el despliegue de la instancia, sin requerir intervención manual.
+La alineación entre el sistema operativo y la lógica de aprovisionamiento permitió completar el proceso de despliegue, aunque debido al fallo, acabamos desplegando manualmente el docker, pudimos ver como trabajar con Terraform. 
 
-Nuestro código está en el siguiente archivo: [Codigo Terraform](../CONF/main.tf)
+Nuestro código corregido está en el siguiente archivo: [Codigo Terraform](../CONF/main.tf)
 
 El script corregido que hemos utilizado es: [setup.sh](../CONF/setup.sh)
+
 
