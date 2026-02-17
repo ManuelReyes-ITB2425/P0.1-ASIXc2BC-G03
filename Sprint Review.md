@@ -21,7 +21,13 @@ En esta sección se detallan las conclusiones y el aprendizaje obtenido tras fin
 ### 📝 Sprint 3 Review
 > **Pendiente de finalización**
 > 
-> Esta revisión se redactará y completará una vez se haya mostrado el proyecto final al profesorado y se reciba el feedback definitivo.
+> En general el Sprint ha sido muy sólido y hemos sabido abordarlo con el tiempo que nos asignaron a este.
+Tras la revisión con el profesorado sobre lo realizado nos han comentado que hay algún punto que podemos mejorar, a continuación escribiré los puntos mejorables:
+Mejorar el esquema de red: Necesitamos marcar que servicio se conecta con quien para que este todo bien claro.
+Reuniones (Sprint planning): Hay que señalar cada persona que realiza cada día para que todo quede bien documentado.
+Realizar pruebas adicionales: Es necesario realizar algunas pruebas adicionales para poder observar que cada servicio funcione como debería de funcionar.
+Ejemplo:
+Desactivar un balanceador de carga para poder ver que el otro balanceador restante funciona correctamente con toda la c
 
 ---
 
