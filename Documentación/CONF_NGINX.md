@@ -132,3 +132,41 @@ Podemos comprobar, que cada vez que reinciamos los contenedores, hay ocasiones q
 
 <img width="512" height="125" alt="image" src="https://github.com/user-attachments/assets/dcdd38e5-9e7c-4457-a885-198cb1bc8b09" />
 
+# Securizando Nginx
+
+```bash
+upstream backend_pool {
+    server s2_app:9000;
+    server s3_app:9000;
+}
+
+server {
+    listen 80;
+    server_name localhost;
+
+    server_tokens off; 
+    
+    error_log  /var/log/nginx/error.log warn;
+    access_log /var/log/nginx/access.log;
+
+    location ~* \.(css|svg|jpg|jpeg|png|gif|ico)$ {
+        proxy_pass http://s6_static;
+    }
+
+    location = /upload.php {
+        include fastcgi_params;
+        fastcgi_pass s4_upload:9000;
+        fastcgi_param SCRIPT_FILENAME /var/www/html/upload.php;
+    }
+
+    location / {
+        include fastcgi_params;
+        fastcgi_pass backend_pool;
+        fastcgi_param SCRIPT_FILENAME /var/www/html/extagram.php;
+    }
+
+    location /uploads/ {
+        proxy_pass http://s6_static;
+    }
+
+```
