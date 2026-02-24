@@ -101,4 +101,29 @@ En esta imagen podemos ver como ha quedado finalmente la base de datos y los cam
 
 <img width="736" height="486" alt="image" src="https://github.com/user-attachments/assets/8cecf63d-f490-4068-b800-acc3d9d77ae9" />
 
+#  Hardening y securitzación Base de Dades
+
+## Aislamiento de Red
+En esta imagen podemos ver como una de las cosas más importante que hemos realizado para mejorar el hardening y la securizacón de la base de datos ha sido bloquear todo tipo de pings y puertos inecesarios para aislar la base de datos. En la siguiente imagen vemos como si intentamos hacer ping nos da conexión rechazada.
+<img width="760" height="239" alt="Captura de pantalla de 2026-02-23 15-39-06" src="https://github.com/user-attachments/assets/caf58a56-c0e8-4ebd-b970-edb6fb42d2e9" />
+
+## Principio de Mínimo Privilegio
+Hemos eliminamos el acceso total (ALL PRIVILEGES) del usuario de la web. Ahora, si un hacker entra, no puede borrar tablas (DROP) ni vaciarlas (DELETE). Solo tiene permiso para SELECT e INSERT.
+Al ejecutar el comando nos dice que no tenemos los permisos requeridos para esa acción. 
+<img width="1082" height="674" alt="Captura de pantalla de 2026-02-23 16-08-44" src="https://github.com/user-attachments/assets/c5356604-e23c-4ece-a1a5-1b9a1bc632a5" />
+
+## Contraseñas Robustas
+Otra medida que hemos implementado para la securización de la base de datos ha sido cambiar las contraseñas por defecto (pass123) por credenciales complejas gestionadas mediante variables de entorno.
+<img width="778" height="552" alt="Captura de pantalla de 2026-02-23 15-29-48" src="https://github.com/user-attachments/assets/edd94693-a4d5-46b1-a6fa-cd4b50fcf709" />
+
+
+## Añadir limite de MB para subir fotos
+Hemos añadido un limite de 2MB en las fotos para subir archivos a nuestra base de datos. Es decir, los archivos que superen el tamaño de 2MB dará error si el usuario los quiere subir a extragram.
+<img width="1308" height="226" alt="Captura de pantalla de 2026-02-23 17-23-36" src="https://github.com/user-attachments/assets/88ff3ffc-b77e-43f2-85fe-13160d53c654" />
+
+
+
+
+
+
 
