@@ -170,3 +170,6 @@ server {
     }
 
 ```
+
+<img width="732" height="251" alt="image" src="https://github.com/user-attachments/assets/01b4572e-f43d-4cb6-a49b-771b0456420a" />
+
