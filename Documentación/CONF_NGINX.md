@@ -133,43 +133,168 @@ Podemos comprobar, que cada vez que reinciamos los contenedores, hay ocasiones q
 <img width="512" height="125" alt="image" src="https://github.com/user-attachments/assets/dcdd38e5-9e7c-4457-a885-198cb1bc8b09" />
 
 # Securizando Nginx
-
+Arxiu principal nginx.conf
 ```bash
+# =============================================================
+# ZONA DE MEMORIA  (nivel http)
+# =============================================================
+
+limit_req_zone  $binary_remote_addr  zone=mylimit:10m    rate=10r/s;
+limit_conn_zone $binary_remote_addr  zone=conn_limit:10m;
+
+
+# =============================================================
+# UPSTREAM
+# =============================================================
+
 upstream backend_pool {
     server s2_app:9000;
     server s3_app:9000;
 }
 
+
+# =============================================================
+# SERVIDOR TRAMPA — cierra conexiones con Host desconocido
+# =============================================================
+
+server {
+    listen 80  default_server;
+    listen 443 ssl default_server;
+    server_name _;
+
+    ssl_certificate     /etc/nginx/certs/nginx.crt;
+    ssl_certificate_key /etc/nginx/certs/nginx.key;
+
+    return 444;
+}
+
+
+# =============================================================
+# REDIRECT HTTP → HTTPS
+# =============================================================
+
 server {
     listen 80;
     server_name localhost;
+    server_tokens off;
+    return 301 https://$host$request_uri;
+}
 
-    server_tokens off; 
-    
+
+# =============================================================
+# SERVIDOR HTTPS PRINCIPAL
+# =============================================================
+
+server {
+    listen 443 ssl;
+    server_name localhost;
+
+    # ── SSL / TLS ────────────────────────────────────────────
+    ssl_certificate     /etc/nginx/certs/nginx.crt;
+    ssl_certificate_key /etc/nginx/certs/nginx.key;
+
+    ssl_protocols             TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers on;
+    ssl_ciphers 'ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256';
+
+    ssl_session_cache   shared:SSL:10m;
+    ssl_session_timeout 10m;
+    ssl_session_tickets off;
+
+    # ── Info del servidor ────────────────────────────────────
+    server_tokens off;
+
+    # ── Logs ────────────────────────────────────────────────
     error_log  /var/log/nginx/error.log warn;
     access_log /var/log/nginx/access.log;
 
+    # ── Métodos HTTP permitidos ──────────────────────────────
+    if ($request_method !~ ^(GET|HEAD|POST)$) {
+        return 405;
+    }
+
+    # ── Límites de cliente (anti-DDoS / Slowloris) ───────────
+    client_max_body_size        10M;
+    client_body_timeout         10s;
+    client_header_timeout       10s;
+    keepalive_timeout           15s;
+    send_timeout                10s;
+
+    # ── Límites de buffers (anti buffer-overflow) ────────────
+    client_body_buffer_size      16k;
+    client_header_buffer_size     1k;
+    large_client_header_buffers  4 8k;
+
+    # ── Conexiones simultáneas por IP ────────────────────────
+    limit_conn conn_limit 20;
+
+    # ── Ocultar cabeceras del backend ────────────────────────
+    fastcgi_hide_header X-Powered-By;
+    proxy_hide_header   X-Powered-By;
+    fastcgi_hide_header Server;
+    proxy_hide_header   Server;
+
+    # ── Bloquear ficheros sensibles ──────────────────────────
+    location ~* \.(ht|git|env|svn|bak|log)$ {
+        deny all;
+        return 404;
+    }
+
+    # ── Estáticos ────────────────────────────────────────────
     location ~* \.(css|svg|jpg|jpeg|png|gif|ico)$ {
         proxy_pass http://s6_static;
+        include snippets/security-headers.conf;
     }
 
+    # ── Upload ───────────────────────────────────────────────
     location = /upload.php {
         include fastcgi_params;
-        fastcgi_pass s4_upload:9000;
-        fastcgi_param SCRIPT_FILENAME /var/www/html/upload.php;
+        fastcgi_pass      s4_upload:9000;
+        fastcgi_param     SCRIPT_FILENAME /var/www/html/upload.php;
+        fastcgi_param     HTTPS on;
+
+        limit_req zone=mylimit burst=5 nodelay;
+
+        include snippets/security-headers.conf;
     }
 
-    location / {
-        include fastcgi_params;
-        fastcgi_pass backend_pool;
-        fastcgi_param SCRIPT_FILENAME /var/www/html/extagram.php;
-    }
-
+    # ── Directorio de uploads (servir, nunca ejecutar PHP) ───
     location /uploads/ {
         proxy_pass http://s6_static;
+
+        location ~* \.php$ {
+            deny all;
+            return 403;
+        }
+
+        include snippets/security-headers.conf;
     }
 
-```
+    # ── Aplicación principal ─────────────────────────────────
+    location / {
+        include fastcgi_params;
+        fastcgi_pass      backend_pool;
+        fastcgi_param     SCRIPT_FILENAME /var/www/html/extagram.php;
+        fastcgi_param     HTTPS on;
 
+        limit_req zone=mylimit burst=20 nodelay;
+
+        include snippets/security-headers.conf;
+    }
+}
+
+```
+Generación de claves privadas y publicas. 
 <img width="732" height="251" alt="image" src="https://github.com/user-attachments/assets/01b4572e-f43d-4cb6-a49b-771b0456420a" />
 
+```bash
+add_header X-Frame-Options           "SAMEORIGIN"                                          always;
+add_header X-XSS-Protection          "1; mode=block"                                       always;
+add_header X-Content-Type-Options    "nosniff"                                             always;
+add_header Referrer-Policy           "no-referrer-when-downgrade"                          always;
+add_header Content-Security-Policy   "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline';" always;
+add_header Permissions-Policy        "geolocation=(), microphone=(), camera=()"            always;
+# Sin 'preload' — peligroso en localhost con self-signed
+add_header Strict-Transport-Security "max-age=31536000; includeSubDomains"                 always;
+
+```
