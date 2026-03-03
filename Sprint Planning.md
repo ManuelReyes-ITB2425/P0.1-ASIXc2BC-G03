@@ -130,3 +130,50 @@ Registro de actividades correspondiente a la fase inicial del proyecto.
 | **Sprint 1** | ✅ Finalizado | Arquitectura base. |
 | **Sprint 2** | ✅ Finalizado | Docker, AWS y Documentación. |
 | **Sprint 3** | 🏁 Finalizado | Documentación final, Testing y Presentación. |
+
+# Registro de Seguimiento del Proyecto
+
+## 17/02/2026
+Hoy hemos realizado la revisión del proyecto 01 con **David Sicart**. Tras realizar la revisión, hemos revisado el proyecto 02 y comenzado a asignarnos tareas y a organizarnos.
+
+* **Manuel:** Realizará la configuración del Firewall.
+* **Aleix:** Hará el hardening de la BBDD.
+* **Aritz:** Tendrá que hacer el hardening de la WAF y el Sprint planning.
+
+<img width="603" height="533" alt="image" src="https://github.com/user-attachments/assets/75fcf24c-d715-4f7d-bf21-6d0ca845551d" />
+
+
+---
+
+## 23/02/2026
+En el día de hoy comenzaremos con las tareas que nos asignamos el anterior día de planificación (Hardening, configuraciones y demás).
+
+* **Manuel:** Realizará la configuración del Firewall.
+* **Aleix:** Hará el hardening de la BBDD.
+* **Aritz:** Tendrá que hacer el hardening de la WAF y el Sprint planning del día.
+
+<img width="602" height="293" alt="image" src="https://github.com/user-attachments/assets/b99ded35-9c42-4ca2-9fa3-b8d7a7069408" />
+
+
+---
+
+## 24/02/2026
+Hoy es el último día del Sprint; ya tenemos casi todo realizado, solo nos queda pulir un par de puntos y documentar lo que hicimos el día anterior.
+
+* **Manuel:** Sigue con la configuración del Firewall del anterior día.
+* **Aleix:** Realizará la documentación del Hardening de la BBDD.
+* **Aritz:** Realizará la documentación del Hardening del sistema operativo y el Sprint planning del día.
+
+<img width="602" height="264" alt="image" src="https://github.com/user-attachments/assets/36c7ac5d-61a1-4ca4-a629-f42febc02d58" />
+
+
+---
+
+## 03/03/2026
+El día de hoy hemos realizado la revisión de la documentación del Sprint con **Jordi Casas**, y una vez hecha la revisión, hemos planificado las tareas que haremos para el siguiente sprint y quién las hará.
+
+* **Manuel:** [Insertar tarea]
+* **Aleix:** [Insertar tarea]
+* **Aritz:** [Insertar tarea]
+
+![Imagen del Proofhub](url_de_la_imagen)
