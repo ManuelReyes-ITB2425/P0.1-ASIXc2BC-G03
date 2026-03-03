@@ -133,6 +133,198 @@ Podemos comprobar, que cada vez que reinciamos los contenedores, hay ocasiones q
 <img width="512" height="125" alt="image" src="https://github.com/user-attachments/assets/dcdd38e5-9e7c-4457-a885-198cb1bc8b09" />
 
 # Securizando Nginx
+Aquí tienes el contenido formateado en Markdown, limpio y estructurado con bloques de código, tablas y negritas para mejorar la legibilidad en tu `README.md` o documentación.
+
+***
+
+# Hardening del Proxy Inverso Nginx (s1-proxy)
+
+## Objetivo
+
+El proxy inverso **s1-proxy** es el único punto de entrada a toda la infraestructura desde Internet. Su configuración de seguridad tiene tres objetivos principales:
+
+1.  **Cifrar todo el tráfico** mediante HTTPS/TLS, eliminando la posibilidad de interceptar comunicaciones (ataques Man-in-the-Middle).
+2.  **Mitigar ataques volumétricos** (DDoS, fuerza bruta, Slowloris) antes de que lleguen al backend PHP.
+3.  **Ocultar la identidad** de la infraestructura interna para dificultar el reconocimiento del atacante.
+
+---
+
+## nginx.conf — Análisis por secciones
+
+### Zona de Memoria (Rate Limiting)
+
+```nginx
+limit_req_zone  $binary_remote_addr  zone=mylimit:10m    rate=10r/s;
+limit_conn_zone $binary_remote_addr  zone=conn_limit:10m;
+```
+
+Se declaran dos zonas de memoria compartida a nivel http (antes de cualquier bloque server) para rastrear el comportamiento por IP:
+
+| Directiva | Función |
+| :--- | :--- |
+| `limit_req_zone` | Crea un registro de peticiones por IP. Limita a **10 peticiones/segundo** por cliente. Se aplica individualmente en cada location. |
+| `limit_conn_zone` | Crea un registro de conexiones simultáneas por IP. Permite bloquear a clientes que abren demasiadas conexiones en paralelo. |
+| `$binary_remote_addr` | Se usa la IP en formato binario (4 bytes) en lugar de texto para minimizar el espacio de memoria consumido por la zona. |
+| `:10m` | Cada zona reserva **10 MB** de memoria RAM compartida entre los workers de Nginx, suficiente para ~160.000 IPs simultáneas. |
+
+> **Por qué:** Sin estas zonas, un atacante podría saturar el servidor con miles de peticiones por segundo o abrir miles de conexiones a la vez, agotando los recursos del servidor (ataque DoS).
+
+### Upstream (Balanceo de Carga)
+
+```nginx
+upstream backend_pool {
+    server s2_app:9000;
+    server s3_app:9000;
+}
+```
+
+Define el grupo de servidores PHP-FPM que procesarán las peticiones de la aplicación principal. Nginx distribuye el tráfico entre `s2_app` y `s3_app` en modo **Round Robin** (por defecto), alternando petición a petición.
+
+> **Por qué:** Distribuir la carga entre dos contenedores PHP mejora la disponibilidad (si uno falla, el otro sigue sirviendo) y permite escalar horizontalmente añadiendo más servidores al pool sin cambiar el código de la aplicación.
+
+### Servidor Trampa (Catch-All)
+
+```nginx
+server {
+    listen 80  default_server;
+    listen 443 ssl default_server;
+    server_name _;
+    return 444;
+}
+```
+
+Este bloque actúa como **"honeypot de conexión"**: intercepta cualquier petición que llegue a la IP del servidor con un Host desconocido (escáneres automáticos, bots, ataques de enumeración).
+
+> **Por qué:** El código de respuesta **444** es específico de Nginx y no existe en el estándar HTTP. Hace que Nginx cierre la conexión TCP sin enviar ninguna respuesta. Esto confunde a los escáneres automáticos, que no reciben ni siquiera un error 400 o 403 para confirmar que hay un servidor activo. La directiva `server_name _` actúa como comodín que captura cualquier nombre de host no definido en otros bloques server.
+
+### Redirección HTTP → HTTPS
+
+```nginx
+server {
+    listen 80;
+    server_name localhost;
+    return 301 https://$host$request_uri;
+}
+```
+
+Redirige permanentemente todo el tráfico no cifrado del puerto 80 al puerto 443.
+
+> **Por qué:** El código **301 Moved Permanently** indica al navegador y a los motores de búsqueda que el sitio ha migrado definitivamente a HTTPS. Así se garantiza que ningún usuario acceda accidentalmente por HTTP en texto plano. La variable `$request_uri` preserva la ruta y los parámetros de la URL original durante el redireccionamiento.
+
+---
+
+## Servidor HTTPS Principal
+
+### SSL/TLS
+
+```nginx
+ssl_protocols             TLSv1.2 TLSv1.3;
+ssl_prefer_server_ciphers on;
+ssl_ciphers 'ECDHE-ECDSA-AES256-GCM-SHA384:...';
+ssl_session_cache   shared:SSL:10m;
+ssl_session_timeout 10m;
+ssl_session_tickets off;
+```
+
+| Directiva | Motivo |
+| :--- | :--- |
+| `ssl_protocols TLSv1.2 TLSv1.3` | Se deshabilitan versiones antiguas e inseguras: TLS 1.0 y 1.1 tienen vulnerabilidades conocidas (POODLE, BEAST). |
+| `ssl_prefer_server_ciphers on` | El servidor impone su lista de cifrados en lugar de aceptar la propuesta del cliente, evitando que se negocie un cifrado débil. |
+| `ssl_ciphers '...'` | Solo se permiten cifrados de alta seguridad basados en **ECDHE** (Elliptic Curve Diffie-Hellman Ephemeral), que garantizan *Perfect Forward Secrecy*: aunque se comprometa la clave privada en el futuro, las sesiones pasadas no se pueden descifrar. |
+| `ssl_session_cache shared:SSL:10m` | Almacena en memoria parámetros de sesiones TLS anteriores para evitar el costoso handshake completo en reconexiones. |
+| `ssl_session_tickets off` | Desactiva los tickets de sesión porque podrían comprometer la confidencialidad futura si la clave maestra se filtra. |
+
+### Ocultación de información del servidor
+
+```nginx
+server_tokens off;
+```
+
+Elimina la versión de Nginx de las cabeceras HTTP de respuesta y de las páginas de error. Sin esta directiva, el servidor envía `Server: nginx/1.25.3`, dando pistas sobre vulnerabilidades de versiones específicas.
+
+### Restricción de métodos HTTP
+
+```nginx
+if ($request_method !~ ^(GET|HEAD|POST)$) {
+    return 405;
+}
+```
+
+Bloquea métodos HTTP no utilizados por la aplicación (DELETE, PUT, PATCH, OPTIONS, TRACE). El método **TRACE** en particular es utilizado en ataques Cross-Site Tracing (XST) para robar cookies de sesión.
+
+### Límites anti-DDoS / Slowloris
+
+```nginx
+client_max_body_size    10M;
+client_body_timeout     10s;
+client_header_timeout   10s;
+keepalive_timeout       15s;
+send_timeout            10s;
+```
+
+Mitigación del ataque **Slowloris**: esta técnica consiste en abrir muchas conexiones al servidor y enviar las cabeceras HTTP muy lentamente (una letra cada pocos segundos) para mantener las conexiones abiertas indefinidamente y agotar el pool de conexiones del servidor.
+
+| Directiva | Función |
+| :--- | :--- |
+| `client_max_body_size 10M` | Limita el tamaño del cuerpo de las peticiones. Evita que alguien sature el disco subiendo archivos enormes. Coherente con el límite de la aplicación de subida de imágenes. |
+| `client_body_timeout 10s` | Si el cliente tarda más de 10 segundos en enviar el cuerpo de la petición, Nginx cierra la conexión. |
+| `client_header_timeout 10s` | Mismo principio para las cabeceras HTTP. |
+| `keepalive_timeout 15s` | Cierra conexiones inactivas después de 15 segundos para liberar recursos. |
+| `send_timeout 10s` | Si el cliente no acepta los datos de respuesta durante 10 segundos, la conexión se cierra. |
+
+### Límites de buffers (anti buffer-overflow)
+
+```nginx
+client_body_buffer_size      16k;
+client_header_buffer_size     1k;
+large_client_header_buffers  4 8k;
+```
+
+Controla cuánta memoria puede ocupar cada petición en los buffers de Nginx. Sin estos límites, un atacante podría enviar cabeceras HTTP extraordinariamente grandes para intentar un desbordamiento de buffer, que podría causar una denegación de servicio o, en versiones antiguas de software, ejecución de código arbitrario.
+
+### Conexiones simultáneas por IP
+
+```nginx
+limit_conn conn_limit 20;
+```
+
+Aplica la zona `conn_limit` definida al inicio para limitar a un máximo de **20 conexiones simultáneas por IP**. Un usuario normal nunca necesita más de 6-8 conexiones en paralelo (navegadores modernos abren 6 como máximo). Valores superiores suelen indicar un ataque automatizado.
+
+### Ocultación de cabeceras del backend
+
+```nginx
+fastcgi_hide_header X-Powered-By;
+proxy_hide_header   X-Powered-By;
+fastcgi_hide_header Server;
+proxy_hide_header   Server;
+```
+
+Elimina cabeceras que el backend (PHP-FPM) añade automáticamente y que revelan tecnología interna: `X-Powered-By: PHP/8.2.x`. Con esta información, un atacante podría buscar vulnerabilidades conocidas específicas de esa versión de PHP en bases de datos como CVE Details o Exploit-DB.
+
+### Bloqueo de ficheros sensibles
+
+```nginx
+location ~* \.(ht|git|env|svn|bak|log)$ {
+    deny all;
+    return 404;
+}
+```
+
+Bloquea el acceso a ficheros de configuración o control de versiones que nunca deberían ser accesibles públicamente: `.htaccess`, `.env` (credenciales), `.git` (código fuente), ficheros de backup (`.bak`) y logs (`.log`). Se devuelve un **404** en lugar de 403 deliberadamente para no confirmar al atacante que el fichero existe.
+
+### Bloqueo de PHP en directorio de uploads
+
+```nginx
+location /uploads/ {
+    location ~* \.php$ {
+        deny all;
+        return 403;
+    }
+}
+```
+
+Previene el ataque de **Remote Code Execution vía File Upload**: si un atacante consigue subir un archivo llamado `shell.php` disfrazado de imagen, este bloque impide que Nginx lo procese como código PHP, aunque la extensión coincida.
+
 Arxiu principal nginx.conf
 ```bash
 # =============================================================
