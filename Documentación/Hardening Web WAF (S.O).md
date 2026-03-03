@@ -6,6 +6,7 @@ Primero realizaremos el Hardening de la estructura AWS esto debido a que nuestro
 Antes que nada, haremos una instantánea del servidor antes de los cambios, por si algo fallara o el servidor no respondiera, para poder tener una copia de backup. 
 
 <img width="906" height="590" alt="image" src="https://github.com/user-attachments/assets/39b465fa-7b71-4307-9746-f320c42e6cc4" />
+
 *Imagen de la sección de AWS donde realizaremos la instantánea de la instancia.*
 
 ## Configuración de GS (Grupos de seguridad):
