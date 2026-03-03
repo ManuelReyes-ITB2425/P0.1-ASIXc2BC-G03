@@ -479,7 +479,23 @@ server {
 Generación de claves privadas y publicas. 
 <img width="732" height="251" alt="image" src="https://github.com/user-attachments/assets/01b4572e-f43d-4cb6-a49b-771b0456420a" />
 
+Aquí tienes la continuación del documento con el mismo formato y estilo:
 
+***
+
+## snippets/security-headers.conf — Cabeceras de Seguridad HTTP
+
+Este archivo se incluye (`include`) en cada bloque `location` del servidor HTTPS. Esto es necesario porque en Nginx, si se usa `add_header` dentro de un bloque `location`, este **anula automáticamente** todas las cabeceras definidas en el bloque `server` padre. Centralizar las cabeceras en un snippet y llamarlo en cada location evita este comportamiento no deseado.
+
+| Cabecera | Valor | Protege contra |
+| :--- | :--- | :--- |
+| `X-Frame-Options` | `SAMEORIGIN` | **Clickjacking**: impide que la web sea incrustada en un `<iframe>` de otro dominio para engañar al usuario para que haga clic en elementos ocultos. |
+| `X-XSS-Protection` | `1; mode=block` | **Cross-Site Scripting (XSS)**: activa el filtro XSS del navegador. Si detecta un ataque, bloquea la página en lugar de intentar "limpiar" el código malicioso. |
+| `X-Content-Type-Options` | `nosniff` | **MIME-type sniffing**: impide que el navegador adivine el tipo de fichero ignorando el Content-Type. Evita que un `.jpg` malicioso sea ejecutado como JavaScript. |
+| `Referrer-Policy` | `no-referrer-when-downgrade` | **Filtración de URLs**: controla qué información de la URL actual se envía al servidor destino al hacer clic en un enlace externo. |
+| `Content-Security-Policy` | `default-src 'self'; ...` | **XSS e inyección de contenido**: declara qué orígenes son de confianza para cargar recursos (scripts, estilos, imágenes). Cualquier recurso no listado es bloqueado por el navegador. |
+| `Permissions-Policy` | `geolocation=(), ...` | **Abuso de APIs del navegador**: deshabilita explícitamente el acceso a APIs sensibles del dispositivo (cámara, micrófono, geolocalización). Aunque la aplicación no las use, impide que código malicioso inyectado pueda activarlas. |
+| `Strict-Transport-Security` | `max-age=31536000; includeSubDomains` | **Downgrade attacks**: el navegador recuerda durante 1 año que este sitio solo debe ser accedido por HTTPS, evitando redirecciones a versiones HTTP inseguras. Se omite el flag `preload` por ser un certificado autofirmado. |
 
 
 ```bash
