@@ -1,96 +1,161 @@
 # Hardening de Estructura (AWS)
 
-[cite_start]Primero realizaremos el Hardening de la estructura AWS esto debido a que nuestro servidor está corriendo en esta tecnología[cite: 53, 54].
+Primero realizaremos el Hardening de la estructura AWS esto debido a que nuestro servidor está corriendo en esta tecnología.
 
-## Snapshots de seguridad
-[cite_start]Antes que nada, haremos una instantánea del servidor antes de los cambios, por si algo fallara o el servidor no respondiera, para poder tener una copia de backup[cite: 55, 56].
+## Snapshots de seguridad:
+Antes que nada, haremos una instantánea del servidor antes de los cambios, por si algo fallara o el servidor no respondiera, para poder tener una copia de backup. 
 
-![Imagen de la sección de AWS donde realizaremos la instantánea de la instancia](ruta/a/tu/imagen1.png)
-[cite_start]*Imagen de la sección de AWS donde realizaremos la instantánea de la instancia[cite: 57].*
+<img width="906" height="590" alt="image" src="https://github.com/user-attachments/assets/39b465fa-7b71-4307-9746-f320c42e6cc4" />
+*Imagen de la sección de AWS donde realizaremos la instantánea de la instancia.*
 
-## Configuración de GS (Grupos de seguridad)
-[cite_start]Una vez ya tenemos un backup preparado, proseguimos con la configuración de los grupos de seguridad, en la cual dejaremos como regla de entrada los puertos HTTP y HTTPS abiertos para todo el mundo; esto, obviamente, es fundamental porque, si no, nuestro servicio no tendría visibilidad en el exterior[cite: 58, 59, 60]. 
+## Configuración de GS (Grupos de seguridad):
+Una vez ya tenemos un backup preparado, proseguimos con la configuración de los grupos de seguridad, en la cual dejaremos como regla de entrada los puertos HTTP y HTTPS abiertos para todo el mundo; esto, obviamente, es fundamental porque, si no, nuestro servicio no tendría visibilidad en el exterior.
+También, por otro lado, dejamos el puerto SSH abierto, pero solo para el mismo servidor, esto para que todos los miembros del grupo puedan entrar a gestionar el servicio. 
 
-[cite_start]También, por otro lado, dejamos el puerto SSH abierto, pero solo para el mismo servidor, esto para que todos los miembros del grupo puedan entrar a gestionar el servicio[cite: 61].
+![Imagen 2](ruta/a/tu/imagen2.png)
+*Imagen de las reglas de entrada comentadas anteriormente.*
 
-![Reglas de entrada](ruta/a/tu/imagen2.png)
-[cite_start]*Imagen de las reglas de entrada comentadas anteriormente[cite: 62].*
+## Habilitar SSM (AWS Systems Manager):
+En este punto realizaremos la habilitación del SSM, este servicio nativo de AWS nos permite conectarnos a la máquina servidor sin tener que utilizar el servicio SSH. Esto nos permitiría poder bloquear el puerto del servicio anteriormente mencionado y así reducir intrusiones no autorizadas.
 
-## Habilitar SSM (AWS Systems Manager)
-[cite_start]En este punto realizaremos la habilitación del SSM, este servicio nativo de AWS nos permite conectarnos a la máquina servidor sin tener que utilizar el servicio SSH[cite: 63, 64]. [cite_start]Esto nos permitiría poder bloquear el puerto del servicio anteriormente mencionado y así reducir intrusiones no autorizadas[cite: 65].
+### Seleccionar el tipo de servicio que tenemos.
+Primero tendremos que seleccionar qué tipo de servicio en nuestro servidor tenemos en AWS, en este caso EC2:
 
-### Seleccionar el tipo de servicio
-[cite_start]Primero tendremos que seleccionar qué tipo de servicio en nuestro servidor tenemos en AWS, en este caso EC2[cite: 66, 67]:
+![Imagen 3](ruta/a/tu/imagen3.png)
+*Imagen de la selección del servicio en AWS*
 
-![Selección del servicio](ruta/a/tu/imagen3.png)
-[cite_start]*Imagen de la selección del servicio en AWS[cite: 68].*
+### Aplicar los permisos para la seguridad óptima del servidor.
+En este siguiente apartado tendremos que seleccionar qué tipos de permisos vamos a aplicar en la instancia; en nuestro caso es el siguiente: **“AmazonSSMManagedInstanceCore”**
 
-### Aplicar permisos de seguridad
-[cite_start]En este siguiente apartado tendremos que seleccionar qué tipos de permisos vamos a aplicar en la instancia; en nuestro caso es el siguiente: **“AmazonSSMManagedInstanceCore”**[cite: 69, 70, 71].
+![Imagen 4](ruta/a/tu/imagen4.png)
+*Imagen de los permisos seleccionados para el rol*
 
-![Permisos seleccionados](ruta/a/tu/imagen4.png)
-[cite_start]*Imagen de los permisos seleccionados para el rol[cite: 72].*
+### Detalles adicionales:
+Para terminar, tenemos que detallar un poco de información adicional que nunca está mal introducirla para poder identificar el rol sencillamente. Como se podrá ver en la siguiente captura, hemos puesto el “Nombre del rol” indicando el nombre de nuestro servidor (**Extagram**) y la descripción la dejamos por defecto.
 
-### Detalles adicionales
-Para terminar, detallamos información adicional para identificar el rol sencillamente. [cite_start]Hemos puesto el “Nombre del rol” indicando el nombre de nuestro servidor (**Extagram**) y la descripción la dejamos por defecto[cite: 73, 74, 75].
+![Imagen 5](ruta/a/tu/imagen5.png)
+*Imagen del apartado para añadir detalles adicionales.*
 
-![Detalles adicionales](ruta/a/tu/imagen5.png)
-[cite_start]*Imagen del apartado para añadir detalles adicionales[cite: 76].*
+### Error y Solución:
+**Error:** Una vez que realizamos todo lo anterior, nos salió el siguiente error en el cual AWS nos decía que no teníamos autorización suficiente para realizar el ROL.
 
-### Resolución de Errores
-* [cite_start]**Error:** Tras realizar lo anterior, apareció un error indicando que no teníamos autorización suficiente para realizar el ROL[cite: 77, 78].
-* **Solución:** Seleccionamos un rol prehecho llamado **“LabInstanceProfile”**. [cite_start]Con esto, logramos conectarnos al servidor sin utilizar el puerto 22 (SSH)[cite: 79, 80, 81].
+![Imagen 6](ruta/a/tu/imagen6.png)
+*Imagen del error que nos dio tras realizar todo el proceso.*
 
-## Verificación
-[cite_start]A continuación, se muestra la conexión mediante SSM (Session Manager) funcionando correctamente[cite: 82, 83].
+**La solución:** Al ver que no podíamos crear un rol personalizado, fuimos a por la alternativa, que era seleccionar un rol ya prehecho y aplicarlo en nuestro servidor. Para esto seleccionamos el rol **“LabInstanceProfile”** y, una vez hecho esto, logramos obtener lo que tanto buscamos, poder conectarnos a nuestro servidor sin tener que utilizar el puerto 22 (SSH).
 
-![Terminal SSM](ruta/a/tu/imagen6.png)
-[cite_start]*Imagen de la nueva terminal por SSM en la cual podemos gestionar el servicio[cite: 84, 85].*
+![Imagen 7](ruta/a/tu/imagen7.png)
+*Imagen del perfil seleccionado para nuestro servidor.*
+
+## Verificación:
+En las siguientes capturas veremos capturas verificativas donde se puede ver que nos podemos conectar mediante SSM (Session Manager) y que todo funciona correctamente.
+
+![Imagen 8](ruta/a/tu/imagen8.png)
+*Ventana de conexión SSM habilitada.*
+
+Como se puede ver en esta otra captura, nos podemos conectar a nuestra máquina y ejecutar comandos sin ningún problema.
+
+![Imagen 9](ruta/a/tu/imagen9.png)
+*Imagen la nueva terminal por SSM en la cual podemos gestionar el servicio sin problema.*
 
 ---
 
-# Hardening del Sistema Operativo
+# Hardening del sistema operativo
 
-[cite_start]Tras la estructura AWS, nos focalizaremos en el Hardening del sistema operativo[cite: 86].
+Una vez que ya tenemos hecho el Hardening de la estructura AWS seguimos con el Hardening del sistema operativo, el más importante y en el que nos focalizaremos primariamente.
 
-## Actualización y Automatización
-1. [cite_start]**Actualización de paquetes:** Usamos `apt update` y `apt upgrade`[cite: 87, 88, 89, 90].
-2. [cite_start]**Automatización:** Instalamos `unattended-upgrades` y `dpkg-reconfigure` para actualizaciones pasivas sin intervención humana[cite: 91, 92, 93, 94, 95, 96, 97].
+## Actualización de paquetes:
+Una gran parte de la seguridad de los servicios se basa en tenerlos actualizados a sus últimas versiones; por eso nuestro primer punto en el hardening del sistema será actualizar paquetes.
 
-## Revisión de Servicios e Inventario de Puertos
-[cite_start]Revisamos los servicios activos y desinstalamos aquellos innecesarios (como **Telnet**, sustituyéndolo por SSH)[cite: 98, 99, 104, 105, 106].
+![Imagen 10](ruta/a/tu/imagen10.png)
+*Utilización de los comandos apt update y apt upgrade para actualizar paquetes.*
 
-| Puerto | Explicación de importancia |
+## Automatización de actualizaciones:
+Actualizar los paquetes puede ser un proceso tedioso por el tiempo que este puede consumir; para aligerar esto, instalaremos **unattended-upgrades**, herramienta que nos permitirá que el sistema se actualice pasivamente sin necesidad de intervención humana.
+
+![Imagen 11](ruta/a/tu/imagen11.png)
+*Instalación de la herramienta unattended-upgrades*
+
+Una vez instalada la herramienta, tendremos que instalar otra herramienta, la cual tiene el nombre de **dpkg-reconfigure**. Es muy importante instalar las 2 herramientas debido a que esta última se encarga de realizar la automatización de las actualizaciones pasivas de la herramienta anterior.
+
+![Imagen 12](ruta/a/tu/imagen12.png)
+*Instalación de la herramienta dpkg-reconfigure*
+
+## Revisión de servicios instalados y corriendo en el servidor:
+El siguiente punto, una vez actualizado el sistema, será revisar qué servicios tenemos en nuestro servidor y desinstalar los servicios que no vamos a utilizar nunca porque no nos interesa o porque no son útiles actualmente.
+
+Primero veremos los servicios que tenemos corriendo en nuestro servidor; como se podrá ver en la imagen adjuntada, tenemos varios servicios activos. Todos estos servicios son necesarios para el correcto funcionamiento del servidor:
+
+| Puerto | Explicación de por qué es importante que esté activo. |
 | :--- | :--- |
-| **22 (SSH)** | [cite_start]Necesario para gestión alternativa al SSM[cite: 101]. |
-| **53 (DNS)** | [cite_start]Vital para la resolución de nombres[cite: 101]. |
-| **68 (network)** | [cite_start]Crucial para el funcionamiento de las redes[cite: 101]. |
-| **80 (HTTP)** | [cite_start]Fundamental para la visibilidad del servicio web[cite: 101]. |
-| **323 (chronyd)** | [cite_start]Necesario para la sincronización de la hora del sistema[cite: 101]. |
-| **337707 (container)**| [cite_start]Puerto donde corren los contenedores del servicio web[cite: 101]. |
+| **22 (SSH)** | Lo dejaremos abierto debido a que, sin él, solo podría gestionar el servidor el usuario mediante el SSM. |
+| **53 (DNS)** | Vital para la resolución de nombres. |
+| **68 (network)** | Crucial para que las redes funcionen en nuestra máquina. |
+| **80 (HTTP)** | Fundamental para que nuestro servidor sea visible en internet. |
+| **323 (chronyd)** | Necesario para que la hora del sistema sea correcta. |
+| **337707 (container)** | Donde corren los contenedores que alojan nuestro servicio web. |
 
-![Servicios activos](ruta/a/tu/imagen7.png)
-[cite_start]*Imagen de los servicios que están corriendo[cite: 103].*
+![Imagen 13](ruta/a/tu/imagen13.png)
+*Imagen de los servicios que están corriendo.*
 
-## Fortalecimiento del Kernel
-[cite_start]Creamos el archivo `99-hardening.conf` para denegar ataques **ICMP, SYN Flood e IP Forwarding**[cite: 107, 108, 109, 110]. [cite_start]Aplicamos los cambios con el comando `sysctl –system`[cite: 39, 40].
+Por otro lado, eliminaremos servicios que no utilizaremos nunca; en este caso, eliminaremos **Telnet** debido a que SSH es una mejor alternativa.
 
-## Configuración de Permisos Críticos
-[cite_start]Cambiamos permisos en archivos vitales para la seguridad[cite: 41]:
-* [cite_start]**Shadow y Gshadow:** Permisos `600`[cite: 42].
-* [cite_start]**Root:** Permisos `700`[cite: 42].
+![Imagen 14](ruta/a/tu/imagen14.png)
+*Desinstalación del servicio telnet con un purge*
 
-## Hardening del Servidor Web y Usuario
-[cite_start]Modificamos el usuario `www-data` para que no pueda acceder al sistema, previniendo que atacantes usen este usuario maliciosamente[cite: 43, 44, 45, 46].
+## Fortalecimiento del Kernel:
+Para seguir con el Hardening del sistema operativo, realizaremos un fortalecimiento del Kernel. Para ello hemos creado el archivo `99-hardening.conf` y aplicaremos parámetros para denegar ciertos tipos de ataques como **ICMP, SYN Flood e IP Forwarding**.
+
+![Imagen 15](ruta/a/tu/imagen15.png)
+*Imagen de los parámetros introducidos en el archivo.*
+
+Aplicamos los cambios con el comando: `sysctl –system`
+
+![Imagen 16](ruta/a/tu/imagen16.png)
+*Verificación de la aplicación de los cambios.*
+
+## Configuración de permisos en archivos vitales:
+Cambiamos los permisos en 3 archivos muy importantes: **shadow, gshadow y root**. Aplicaremos permisos **600** en shadow y gshadow, y **700** en el directorio root.
+
+![Imagen 17](ruta/a/tu/imagen17.png)
+*Cambio de permisos en los archivos mencionados.*
+
+## Hardening para el servidor web:
+Realizamos cambios para que el usuario que corre la página web (**www-data**) no pueda acceder al sistema, previniendo que atacantes utilicen este usuario de forma maliciosa.
+
+![Imagen 18](ruta/a/tu/imagen18.png)
+*Comando utilizado para denegar el acceso del usuario web.*
 
 ---
 
-# Revisión Final y Herramientas de Auditoría
+# Revisión del hardening
 
-[cite_start]Instalamos **Lynis** para obtener una puntuación de Hardening[cite: 47].
-* [cite_start]**Resultado inicial:** 62/100[cite: 48, 49].
+Instalamos la herramienta **Lynis** para obtener una puntuación de Hardening y detectar posibles mejoras.
 
-### Mejoras aplicadas post-auditoría:
-* [cite_start]**Crontab y Grub:** Cambio de permisos para evitar cambios en el orden de arranque o persistencia de malware[cite: 49, 50].
-* [cite_start]**SSH:** Ajustes en `/etc/ssh/sshd_config` según recomendaciones de Lynis[cite: 50].
-* [cite_start]**Malware Scanner:** Instalación de **RKHunter**, un escáner que solo consume recursos durante escaneos activos[cite: 51, 52].
+![Imagen 19](ruta/a/tu/imagen19.png)
+
+**Resultado:** El primer resultado fue un **62 sobre 100**, una valoración sólida que decidimos mejorar.
+
+![Imagen 20](ruta/a/tu/imagen20.png)
+*Imagen del resultado obtenido al ejecutar Lynis.*
+
+## Aplicando mejoras de Hardening:
+Basándonos en las recomendaciones de Lynis, realizamos los siguientes cambios:
+
+### Cambio de permisos en Crontab y Grub:
+Cambiamos los permisos de archivos de arranque y automatización para evitar cambios en el orden de arranque o persistencia de malware.
+
+![Imagen 21](ruta/a/tu/imagen21.png)
+*Imagen de los cambios de permisos realizados.*
+
+### Cambios de parámetros del servicio SSH:
+Modificamos varios puntos recomendados en el archivo `/etc/ssh/sshd_config`.
+
+![Imagen 22](ruta/a/tu/imagen22.png)
+*Imagen de los cambios recomendados por Lynis.*
+
+### Instalación de un Malware scanner:
+Instalamos **RKHunter** como escáner de malware óptimo, ya que solo consume recursos cuando realizamos un escaneo activo.
+
+![Imagen 23](ruta/a/tu/imagen23.png)
+*Imagen verificativa de la instalación de RKHunter.*
