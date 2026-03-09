@@ -52,32 +52,9 @@ Se ha modificado el archivo orquestador para incluir el nuevo bloque de monitori
       - prometheus
     networks:
       - extagram-net
-
-Aquí tienes la sección de configuración de Prometheus y validación, formateada para mantener la coherencia con el resto de tu documentación:
-
-***
-
-## 5.3 Configuración del Motor de Extracción (prometheus.yml)
-
-Para que Prometheus identifique su objetivo de extracción (**cAdvisor**), se ha aprovisionado el siguiente archivo de configuración estático.
-
-Se estableció un `scrape_interval` agresivo de **5 segundos**. Al tratarse de un entorno de pruebas de estrés, una recolección estándar (ej. 1 minuto) no permitiría visualizar los picos de carga momentáneos en los contenedores PHP.
-
-**Archivo:** `./prometheus/prometheus.yml`
-
-```yaml
-global:
-  scrape_interval: 5s # Captura de alta frecuencia para detectar picos de carga
-
-scrape_configs:
-  - job_name: 'cadvisor'
-    static_configs:
-      # Uso del alias DNS de Docker en lugar de una IP estática
-      - targets: ['cadvisor:8080'] 
 ```
 
 
-***
 
 ## 5.3 Configuración del Motor de Extracción (prometheus.yml)
 
