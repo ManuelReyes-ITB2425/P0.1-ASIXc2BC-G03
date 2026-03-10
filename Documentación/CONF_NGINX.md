@@ -508,53 +508,58 @@ add_header Permissions-Policy        "geolocation=(), microphone=(), camera=()" 
 add_header Strict-Transport-Security "max-age=31536000; includeSubDomains"                 always;
 
 ```
-#Firewall a S1
 
-## 1. Objectiu
-Dins dels requeriments de securització per a l'entorn Extagram, s'ha implementat un tallafocs (firewall) a nivell de sistema operatiu host (màquina virtual d'AWS) que s'anteposa al proxy invers principal (`S1`). Afegint una capa de filtratge de xarxa per sota dels Security Groups del Cloud i per sobre de la lògica de contenidors.
 
-## 2. Anàlisi del problema: Docker vs UFW
-Es va identificar una vulnerabilitat arquitectònica comuna en entorns conteneritzats: **El bypass d'UFW per part de Docker**.
 
-Per defecte, quan Docker exposa un port (ex: `80:80` a `s1_proxy`), el dimoni de Docker insereix regles de configuració directament a la cadena `PREROUTING` d'`iptables`. Això provoca que el trànsit d'entrada s'enruti cap al contenidor *abans* que el tallafocs del sistema operatiu (UFW) pugui avaluar les seves regles de bloqueig, deixant els ports completament oberts a Internet independentment de l'estat d'UFW.
+Aquí tienes el texto traducido al castellano manteniendo el formato Markdown:
 
-## 3. Solució Implementada (`ufw-docker`)
-Per resoldre aquesta incidència i forçar el compliment de les polítiques de seguretat del sistema operatiu, s'ha implementat la utilitat `ufw-docker`. Aquest script s'encarrega d'interceptar el trànsit modificant la cadena `DOCKER-USER` d'`iptables`, obligant a que qualsevol petició externa sigui inspeccionada primer per les regles explícites d'UFW abans d'arribar als contenidors.
+# Firewall en S1
 
-### 3.1 Neteja i Hardening de regles locals
-Prèviament a la implementació, s'han eliminat les regles innecessàries del host local i s'ha aplicat una política estricta de denegació per defecte (Deny All).
+## 1. Objetivo
+Dentro de los requisitos de securización para el entorno Extagram, se ha implementado un cortafuegos (firewall) a nivel de sistema operativo host (máquina virtual de AWS) que se antepone al proxy inverso principal (`S1`). Añadiendo una capa de filtrado de red por debajo de los Security Groups del Cloud y por encima de la lógica de contenedores.
+
+## 2. Análisis del problema: Docker vs UFW
+Se identificó una vulnerabilidad arquitectónica común en entornos contenerizados: **El bypass de UFW por parte de Docker**.
+
+Por defecto, cuando Docker expone un puerto (ej: `80:80` en `s1_proxy`), el demonio de Docker inserta reglas de configuración directamente en la cadena `PREROUTING` de `iptables`. Esto provoca que el tráfico de entrada se enrute hacia el contenedor *antes* de que el cortafuegos del sistema operativo (UFW) pueda evaluar sus reglas de bloqueo, dejando los puertos completamente abiertos a Internet independientemente del estado de UFW.
+
+## 3. Solución Implementada (`ufw-docker`)
+Para resolver esta incidencia y forzar el cumplimiento de las políticas de seguridad del sistema operativo, se ha implementado la utilidad `ufw-docker`. Este script se encarga de interceptar el tráfico modificando la cadena `DOCKER-USER` de `iptables`, obligando a que cualquier petición externa sea inspeccionada primero por las reglas explícitas de UFW antes de llegar a los contenedores.
+
+### 3.1 Limpieza y Hardening de reglas locales
+Previamente a la implementación, se han eliminado las reglas innecesarias del host local y se ha aplicado una política estricta de denegación por defecto (Deny All).
 
 ```bash
-# S'assegura l'accés d'administració abans d'aplicar polítiques estrictes
+# Se asegura el acceso de administración antes de aplicar políticas estrictas
 sudo ufw allow 22/tcp
 
-# Es defineix la política per defecte a Drop
+# Se define la política por defecto a Drop
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
 
-# S'eliminen regles redundants del host que puguin entrar en conflicte amb Docker
+# Se eliminan reglas redundantes del host que puedan entrar en conflicto con Docker
 sudo ufw delete allow 80/tcp
 sudo ufw delete allow 443/tcp
 sudo ufw delete allow 3000/tcp
 sudo ufw delete allow 9090/tcp
 ```
 
+### 3.2. Aplicación de reglas específicas para contenedores
 
-### 3.2. Aplicació de regles específiques per a contenidors
+Una vez saneada la integración entre el cortafuegos y el demonio de Docker, se habilitaron específicamente las rutas hacia los contenedores de producción mediante la red virtual (`terraformdocker_extagram-net`).
 
-Un cop sanejada la integració entre el tallafocs i el dimoni de Docker, es van habilitar específicament les rutes cap als contenidors de producció mitjançant la xarxa virtual (`terraformdocker_extagram-net`).
+Se permitió:
 
-Es va permetre:
-
-* Trànsit HTTP/HTTPS cap al proxy S1 (`s1_proxy`).
-* Accessos als panells de monitoratge (`grafana` i `prometheus`) per donar resposta als requeriments de l'Sprint 5.
+* Tráfico HTTP/HTTPS hacia el proxy S1 (`s1_proxy`).
+* Accesos a los paneles de monitorización (`grafana` y `prometheus`) para dar respuesta a los requerimientos del Sprint 5.
 
 ```bash
-# Regles per al trànsit web de l'aplicació Extagram (S1)
+# Reglas para el tráfico web de la aplicación Extagram (S1)
 sudo ufw-docker allow s1_proxy 80/tcp
 sudo ufw-docker allow s1_proxy 443/tcp
 
-# Regles per al monitoratge de la infraestructura
+# Reglas para la monitorización de la infraestructura
 sudo ufw-docker allow grafana 3000/tcp
 sudo ufw-docker allow prometheus 9090/tcp
 ```
+<img width="867" height="166" alt="image" src="https://github.com/user-attachments/assets/d36755ce-a790-45b9-8990-6f0d2b728b79" />
