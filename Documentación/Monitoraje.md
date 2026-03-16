@@ -158,8 +158,4 @@ Las gráficas muestran información como:
 - Actividad de contenedores
 - Recursos del sistema
 
----
-
-# Visualización final de métricas
-
 ![Gráficas finales](images/img_7_1.png)
