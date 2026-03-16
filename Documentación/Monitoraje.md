@@ -1,111 +1,164 @@
-# Configuración Grafana y Prometheus
+# Configuración de Grafana y Prometheus
 
-## Monitoraje:
+## Monitorización del sistema
 
-En este apartado veremos cómo realizar la conexión entre varios servicios (Node Exporter, cAdvisor, Grafana y Prometheus); estos 4 servicios realizarán la función de mostrarnos los recursos en vivo que están siendo utilizados en los contenedores de nuestro servidor.
+En este apartado veremos cómo realizar la conexión entre varios servicios:
 
-## Configuración en el archivo docker-compose.yml:
+- Node Exporter
+- cAdvisor
+- Grafana
+- Prometheus
 
-En este primer apartado veremos las configuraciones necesarias para que los servicios encapsulados en contenedores puedan implementarse correctamente con el sistema que ya tenemos realizado.
+Estos cuatro servicios trabajan conjuntamente para mostrarnos **los recursos en tiempo real que están siendo utilizados por los contenedores de nuestro servidor**.
 
 ---
 
-## Grafana:
+# Configuración en `docker-compose.yml`
 
-El servicio Grafana tendrá la función de mostrar toda la información mediante una interfaz; es la parte más gráfica y visiblemente atractiva de todos los servicios de monitorización.
+En este apartado veremos las configuraciones necesarias para que los servicios encapsulados en contenedores puedan implementarse correctamente dentro del sistema.
 
-### Configuración realizada para el servicio Grafana
+---
 
-Como se puede observar en la captura, tenemos parámetros ya vistos; igualmente, haremos un desglose rápido sobre qué hace cada uno:
+# Grafana
+
+Grafana es el servicio encargado de **mostrar toda la información mediante una interfaz gráfica**.  
+Es la parte más visual de todo el sistema de monitorización.
+
+## Configuración del servicio Grafana
+
+![Configuración Grafana](images/img_1_1.png)
+
+Como se puede observar en la captura, se utilizan varios parámetros de configuración.
 
 | Parámetro | Funcionalidad |
 |-----------|--------------|
-| image | Indica que la imagen que utilizaremos para el servicio será el Grafana en su última versión. |
-| container_name | Indicamos que el nombre del contenedor sea Grafana (fácil para poderlo identificar). |
-| ports | Señalamos que el puerto 3000 será el que estará ocupando y mediante este nos podremos conectar al servicio. |
-| environment | Establecemos que la contraseña sea admin. |
-| networks | Indicamos que estará en la misma red que todos nuestros contenedores. |
+| image | Indica que la imagen utilizada para el servicio será Grafana en su última versión. |
+| container_name | Nombre del contenedor (Grafana) para poder identificarlo fácilmente. |
+| ports | Se expone el puerto **3000** para acceder al servicio. |
+| environment | Se establece la contraseña inicial como **admin**. |
+| networks | El contenedor se conecta a la misma red que el resto de servicios. |
 
 ---
 
-## cAdvisor:
+# cAdvisor
 
-El servicio cAdvisor tendrá la función de vigilar nuestros otros servicios (s1, s2, etc.), todo esto para poder medir cuántos recursos consume cada uno de estos; toda esta información luego será transportada a las gráficas que veremos en el Grafana.
+El servicio **cAdvisor** se encarga de vigilar los otros servicios (s1, s2, etc.) para medir el consumo de recursos de cada contenedor.
 
-### Configuración realizada para el servicio cAdvisor
+Toda esta información posteriormente será utilizada por **Grafana para generar las gráficas de monitorización**.
 
-Explicación de cada parámetro que hemos configurado para el correcto funcionamiento de este servicio.
+## Configuración del servicio cAdvisor
+
+![Configuración cAdvisor](images/img_2_1.png)
+
+### Explicación de parámetros
 
 | Parámetro | Funcionalidad |
 |-----------|--------------|
-| image | Seleccionamos la imagen más reciente de cAdvisor. |
-| container_name | Indicamos que el nombre del contenedor sea cadvisor; esto nos sirve para poder identificarlo fácilmente. |
-| ports | Indicamos el puerto que este servicio utilizará; en este caso, el 8080. |
-| volumes | Este parámetro es muy importante debido a que le indicamos varias rutas que tiene que mapear y los permisos que utilizará en estas; varias rutas de las introducidas son para calcular la CPU, espacio de disco y demás. |
-| networks | Por último, le indicamos que la red que tendrá que utilizar será la misma que todos los demás contenedores (extagram-net). |
+| image | Se utiliza la imagen más reciente de cAdvisor. |
+| container_name | Nombre del contenedor: **cadvisor**. |
+| ports | Puerto utilizado por el servicio: **8080**. |
+| volumes | Se mapean rutas del sistema para poder calcular CPU, disco y otros recursos. |
+| networks | Se conecta a la red **extagram-net**, igual que los demás contenedores. |
 
 ---
 
-## node-exporter:
+# Node Exporter
 
-El servicio node-exporter que hemos implementado en nuestro servidor tendrá la función de revisar las características físicas de la máquina y su tiempo de vida.
+El servicio **node-exporter** tiene la función de revisar las características físicas del servidor y métricas del sistema.
 
-### Configuración realizada para el servicio node-exporter.
+Esto incluye:
 
-Explicación de cada parámetro configurado para node-exporter:
+- Uso de CPU
+- Memoria
+- Disco
+- Tiempo de actividad del sistema
+
+## Configuración del servicio node-exporter
+
+![Configuración Node Exporter](images/img_3_1.png)
+
+### Explicación de parámetros
 
 | Parámetro | Funcionalidad |
 |-----------|--------------|
-| image | Indicamos la imagen que utilizaremos (última versión). |
-| container_name | Identificamos el contenedor con un nombre. |
-| restart | Indicamos que no se reinicie a no ser que se pare el contenedor. |
-| Volumes | Le indicamos qué rutas podrá analizar y con qué permisos podrá ver estas. |
-| Command | Sirve para indicarle al contenedor qué rutas mirar. |
-| network | Otorgamos al contenedor la misma red que todos los demás para que así estén todos conectados. |
-| ports | Indicamos el puerto que utilizará (9100). |
+| image | Imagen utilizada del servicio en su última versión. |
+| container_name | Nombre asignado al contenedor. |
+| restart | Evita que el contenedor se reinicie automáticamente salvo que se detenga. |
+| volumes | Rutas del sistema que el contenedor podrá analizar. |
+| command | Indica qué rutas debe analizar el contenedor. |
+| network | Se conecta a la misma red que el resto de servicios. |
+| ports | Puerto utilizado: **9100**. |
 
 ---
 
-## Prometheus:
+# Prometheus
 
-Por último, el Prometheus, el cual tendrá la función de recoger todos los datos extraídos de los demás servicios y guardarlos para que luego el Grafana los pueda plasmar en sus gráficas.
+Prometheus es el servicio encargado de **recoger todos los datos generados por los otros servicios y almacenarlos**.
 
-### Configuración realizada para el servicio Prometheus.
+Posteriormente, Grafana utilizará estos datos para generar las gráficas.
 
-Explicación de cada parámetro configurado para node-exporter:
+## Configuración del servicio Prometheus
+
+![Configuración Prometheus](images/img_4_1.png)
+
+### Explicación de parámetros
 
 | Parámetro | Funcionalidad |
 |-----------|--------------|
-| image | Establecemos que la imagen que utilizamos para el servicio es la del Prometheus en su última versión. |
-| container_name | Configuramos el nombre del contenedor a Prometheus (así tenemos el servicio bien identificado). |
-| ports | Indicamos que los puertos que utilizaremos serán el 9090. |
-| Volumes | Indicamos qué permisos tendrá que utilizar para la configuración del Prometheus. |
-| networks | Establecemos el contenedor dentro de la misma red que los demás servicios. |
+| image | Imagen de Prometheus en su última versión. |
+| container_name | Nombre del contenedor: **Prometheus**. |
+| ports | Puerto expuesto: **9090**. |
+| volumes | Permisos y rutas para la configuración del servicio. |
+| networks | Se conecta a la misma red que el resto de contenedores. |
 
 ---
 
-## Configuraciones adicionales:
+# Configuraciones adicionales
 
-En este apartado veremos configuraciones adicionales que hemos tenido que realizar para que todo funcione correctamente, aparte de la configuración inicial hecha en el docker-compose.yml.
-
-### prometheus.yml:
-
-Este segundo archivo para la configuración del servicio Prometheus es vital debido a que le señalaremos a qué servicios les tiene que solicitar los datos y con qué frecuencia.
-
-### Configuración realizada para el servicio Prometheus en el archivo prometheus.yml.
+Además de `docker-compose.yml`, se necesita configurar archivos adicionales para que el sistema funcione correctamente.
 
 ---
 
-## Conexión Grafana con Prometheus:
+# Archivo `prometheus.yml`
 
-También hemos tenido que conectar vía interfaz gráfica en Grafana el servicio Prometheus, configurándolo como nuestra base de datos de donde recibiremos los datos para las futuras gráficas.
+Este archivo es fundamental para el funcionamiento de Prometheus.
 
-### Imágenes del Prometheus siendo configurado como base de datos por defecto del Grafana.
+Aquí se especifica:
+
+- Qué servicios debe monitorizar
+- Cada cuánto tiempo debe recoger los datos
+
+## Configuración en `prometheus.yml`
+
+![Configuración prometheus.yml](images/img_4_2.png)
 
 ---
 
-## Resultado:
+# Conexión de Grafana con Prometheus
 
-Como resultado hemos obtenido un panel con todas las gráficas detalladas con los servicios que utilizamos en nuestro servidor:
+También es necesario configurar desde la **interfaz gráfica de Grafana** la conexión con Prometheus.
 
-### Imagen de las gráficas obtenidas acabada la configuración.
+Prometheus será configurado como **fuente de datos (Data Source)** para que Grafana pueda utilizar sus métricas.
+
+![Configuración datasource Prometheus](images/img_5_1.png)
+
+---
+
+# Resultado final
+
+Después de completar todas las configuraciones, se obtiene un panel de monitorización con las métricas de los servicios del servidor.
+
+![Dashboard Grafana](images/img_6_1.png)
+
+Las gráficas muestran información como:
+
+- Uso de CPU
+- Uso de memoria
+- Actividad de contenedores
+- Recursos del sistema
+
+---
+
+# Visualización final de métricas
+
+![Gráficas finales](images/img_7_1.png)
