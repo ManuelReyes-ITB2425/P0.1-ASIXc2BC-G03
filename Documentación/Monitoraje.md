@@ -157,5 +157,3 @@ Las gráficas muestran información como:
 - Uso de memoria
 - Actividad de contenedores
 - Recursos del sistema
-
-![Gráficas finales](images/img_7_1.png)
