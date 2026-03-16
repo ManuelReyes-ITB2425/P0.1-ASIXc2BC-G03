@@ -26,7 +26,7 @@ Es la parte más visual de todo el sistema de monitorización.
 
 ## Configuración del servicio Grafana
 
-![Configuración Grafana](images/img_1_1.png)
+![Configuración Grafana](<img width="594" height="267" alt="image" src="https://github.com/user-attachments/assets/9680d9d3-2811-498c-bbb6-f02aeead3c36" />)
 
 Como se puede observar en la captura, se utilizan varios parámetros de configuración.
 
