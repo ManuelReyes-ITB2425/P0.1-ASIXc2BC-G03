@@ -510,9 +510,6 @@ add_header Strict-Transport-Security "max-age=31536000; includeSubDomains"      
 ```
 
 
-
-Aquí tienes el texto traducido al castellano manteniendo el formato Markdown:
-
 # Firewall en S1
 
 ## 1. Objetivo
