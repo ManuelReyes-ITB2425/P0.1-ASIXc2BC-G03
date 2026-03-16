@@ -26,7 +26,7 @@ Es la parte más visual de todo el sistema de monitorización.
 
 ## Configuración del servicio Grafana
 
-![Configuración Grafana](<img width="594" height="267" alt="image" src="https://github.com/user-attachments/assets/9680d9d3-2811-498c-bbb6-f02aeead3c36" />)
+<img width="594" height="267" alt="image" src="https://github.com/user-attachments/assets/7a4fb267-0b4c-44eb-9253-84ef2869b3bd" />
 
 Como se puede observar en la captura, se utilizan varios parámetros de configuración.
 
@@ -48,7 +48,7 @@ Toda esta información posteriormente será utilizada por **Grafana para generar
 
 ## Configuración del servicio cAdvisor
 
-![Configuración cAdvisor](images/img_2_1.png)
+<img width="838" height="362" alt="image" src="https://github.com/user-attachments/assets/22a2404d-1f5f-4f3d-bf82-b069adab56b5" />
 
 ### Explicación de parámetros
 
@@ -75,7 +75,7 @@ Esto incluye:
 
 ## Configuración del servicio node-exporter
 
-![Configuración Node Exporter](images/img_3_1.png)
+<img width="903" height="389" alt="image" src="https://github.com/user-attachments/assets/6ff3b524-297e-4906-bcf3-052084f4df44" />
 
 ### Explicación de parámetros
 
@@ -99,7 +99,7 @@ Posteriormente, Grafana utilizará estos datos para generar las gráficas.
 
 ## Configuración del servicio Prometheus
 
-![Configuración Prometheus](images/img_4_1.png)
+<img width="813" height="265" alt="image" src="https://github.com/user-attachments/assets/87517651-b4d3-4c6a-9ba3-8e7a7548e764" />
 
 ### Explicación de parámetros
 
@@ -130,7 +130,7 @@ Aquí se especifica:
 
 ## Configuración en `prometheus.yml`
 
-![Configuración prometheus.yml](images/img_4_2.png)
+<img width="478" height="310" alt="image" src="https://github.com/user-attachments/assets/18adb238-8606-4466-928c-32f79341060b" />
 
 ---
 
@@ -140,7 +140,8 @@ También es necesario configurar desde la **interfaz gráfica de Grafana** la co
 
 Prometheus será configurado como **fuente de datos (Data Source)** para que Grafana pueda utilizar sus métricas.
 
-![Configuración datasource Prometheus](images/img_5_1.png)
+<img width="900" height="738" alt="image" src="https://github.com/user-attachments/assets/80d0e39f-9002-4084-b5fa-9b65f69e2e4a" />
+<img width="902" height="988" alt="image" src="https://github.com/user-attachments/assets/fbda08ad-a376-445d-90b3-1820495c08d5" />
 
 ---
 
@@ -148,7 +149,7 @@ Prometheus será configurado como **fuente de datos (Data Source)** para que Gra
 
 Después de completar todas las configuraciones, se obtiene un panel de monitorización con las métricas de los servicios del servidor.
 
-![Dashboard Grafana](images/img_6_1.png)
+<img width="903" height="849" alt="image" src="https://github.com/user-attachments/assets/8478fc2d-6bb4-436a-892e-82ec5362f1a6" />
 
 Las gráficas muestran información como:
 
