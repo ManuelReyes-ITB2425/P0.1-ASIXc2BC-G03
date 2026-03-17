@@ -142,7 +142,6 @@ Hoy hemos realizado la revisión del proyecto 01 con **David Sicart**. Tras real
 
 <img width="603" height="533" alt="image" src="https://github.com/user-attachments/assets/75fcf24c-d715-4f7d-bf21-6d0ca845551d" />
 
-
 ---
 
 ## 23/02/2026
@@ -153,7 +152,6 @@ En el día de hoy comenzaremos con las tareas que nos asignamos el anterior día
 * **Aritz:** Tendrá que hacer el hardening de la WAF y el Sprint planning del día.
 
 <img width="602" height="293" alt="image" src="https://github.com/user-attachments/assets/b99ded35-9c42-4ca2-9fa3-b8d7a7069408" />
-
 
 ---
 
@@ -166,14 +164,58 @@ Hoy es el último día del Sprint; ya tenemos casi todo realizado, solo nos qued
 
 <img width="602" height="264" alt="image" src="https://github.com/user-attachments/assets/36c7ac5d-61a1-4ca4-a629-f42febc02d58" />
 
+## Sprint 5
+
+## 📅 Marzo 2026
+
+### 03/03/2026:
+El día de hoy íbamos a realizar la revisión de la documentación, pero tuvimos un error, el cual no podemos solucionar sobre la base de datos, y decidimos posponer la revisión para el siguiente día. También realizamos la planificación de las tareas que haremos para el siguiente sprint y quién las hará.
+
+* **Manuel:** Se encargará de la instalación del servicio Prometheus y Grafana.
+* **Aleix:** No vino.
+* **Aritz:** Se encargará de la configuración del servicio Prometheus y Grafana.
+
+<img width="601" height="515" alt="image" src="https://github.com/user-attachments/assets/1dd0aba5-97d4-4f10-a8a4-4bf4eddad931" />
+
+### 09/03/2026:
+El día de hoy proseguiremos con la instalación de los 2 servicios (Grafana y Prometheus) y la configuración de estos.
+
+* **Manuel:** Seguirá con la instalación de los 2 servicios y también realizará la documentación si dispone de tiempo libre.
+* **Aleix:** Vino tarde (1h).
+* **Aritz:** Seguirá con la configuración de los 2 servicios y, si queda tiempo, realizará la documentación.
+
+<img width="601" height="486" alt="image" src="https://github.com/user-attachments/assets/9331e1fd-4747-4960-91b2-3a8440700a93" />
 
 ---
 
-## 03/03/2026
-El día de hoy hemos realizado la revisión de la documentación del Sprint con **Jordi Casas**, y una vez hecha la revisión, hemos planificado las tareas que haremos para el siguiente sprint y quién las hará.
+## Sprint 6
 
-* **Manuel:** [Insertar tarea]
-* **Aleix:** [Insertar tarea]
-* **Aritz:** [Insertar tarea]
+### 10/03/2026:
+El día de hoy realizaremos la documentación de lo realizado en los días anteriores y revisaremos cada servicio que tenemos debido a que hemos experimentado problemas con alguno de estos, en caso de que haya un problema trataremos de resolverlo.
 
-![Imagen del Proofhub](url_de_la_imagen)
+* **Manuel:** Revisará algunos servicios que están dando problemas (web) y realizará la presentación que tendremos que hacer en un par de días.
+* **Aleix:** Revisará algunos errores que tenemos con la base de datos.
+* **Aritz:** Realizará la documentación del Prometheus y Grafana aparte de los Sprints plannings.
+
+<img width="601" height="488" alt="image" src="https://github.com/user-attachments/assets/886c2703-af6f-463c-9a41-21b08250e4d1" />
+
+### 16/03/2026:
+El día de hoy no hemos hecho clase por lo tanto no hay una planificación del día.
+
+* **Manuel:** Nada (No hubo clase).
+* **Aleix:** Nada (No hubo clase).
+* **Victor:** Nada (No hubo clase).
+* **Aritz:** Nada (No hubo clase).
+
+<img width="601" height="485" alt="image" src="https://github.com/user-attachments/assets/3246059a-5a04-4b35-8087-6e576a18f738" />
+
+### 17/03/2026:
+El día de hoy nos centraremos en dejar cerrado todo el proyecto y terminar la presentación de este. Aparte miraremos de arreglar un par de errores de último momento que han surgido.
+
+* **Manuel:** Estará revisando los errores.
+* **Aleix:** Puliendo la presentación.
+* **Víctor:** Puliendo la presentación.
+* **Aritz:** Realizará el pulido final del Proofhub y revisará errores.
+
+<img width="601" height="406" alt="image" src="https://github.com/user-attachments/assets/c4eeabe6-81db-4013-b231-5e2e168fb078" />
+
