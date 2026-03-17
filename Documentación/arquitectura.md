@@ -2,7 +2,7 @@
 
 En este diagrama de red se puede observar cómo hemos estructurado el proyecto, así como la información relevante de cada uno de los servidores y sus respectivas características.
 
-<img width="428" height="543" alt="image" src="https://github.com/user-attachments/assets/30fb516a-4297-4124-b00c-0cd29a402d93" />
+<img width="458" height="550" alt="image" src="https://github.com/user-attachments/assets/0095c4ec-dc00-4ff5-853d-add7d25750d7" />
 
 
 # Explicación
