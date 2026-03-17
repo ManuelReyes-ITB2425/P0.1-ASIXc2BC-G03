@@ -194,18 +194,6 @@ El día de hoy proseguiremos con la instalación de los 2 servicios (Grafana y P
 
 <img width="601" height="486" alt="image" src="https://github.com/user-attachments/assets/9331e1fd-4747-4960-91b2-3a8440700a93" />
 
-### 🚀 Resumen de Sprints
-| Sprint | Estado | Enfoque |
-| :--- | :--- | :--- |
-| **Sprint 1** | ✅ Finalizado | Arquitectura base. |
-| **Sprint 2** | ✅ Finalizado | Docker, AWS y Documentación. |
-| **Sprint 3** | ✅ Finalizado | Documentación final, Testing y Presentación. |
-| **Sprint 4** | ✅ Finalizado | Hardening S.O, BBDD y WEB + Firewall |
-| **Sprint 5** | ✅ Finalizado | Instalación + configuración Prometheus, Grafana (Monitoraje) |
----
-
-# 🚀 Sprint 6
-
 ### 10/03/2026:
 El día de hoy realizaremos la documentación de lo realizado en los días anteriores y revisaremos cada servicio que tenemos debido a que hemos experimentado problemas con alguno de estos, en caso de que haya un problema trataremos de resolverlo.
 
@@ -241,7 +229,16 @@ El día de hoy nos centraremos en dejar cerrado todo el proyecto y terminar la p
 | **Sprint 3** | ✅ Finalizado | Documentación final, Testing y Presentación. |
 | **Sprint 4** | ✅ Finalizado | Hardening S.O, BBDD y WEB + Firewall |
 | **Sprint 5** | ✅ Finalizado | Instalación + configuración Prometheus, Grafana (Monitoraje) |
-| **Sprint 6** | ✅ Finalizado | Documentación (Grafana, pruebas de estrés) y presentación + resolución de problemas |
+---
+
+### 🚀 Resumen de Sprints
+| Sprint | Estado | Enfoque |
+| :--- | :--- | :--- |
+| **Sprint 1** | ✅ Finalizado | Arquitectura base. |
+| **Sprint 2** | ✅ Finalizado | Docker, AWS y Documentación. |
+| **Sprint 3** | ✅ Finalizado | Documentación final, Testing y Presentación. |
+| **Sprint 4** | ✅ Finalizado | Hardening S.O, BBDD y WEB + Firewall |
+| **Sprint 5** | ✅ Finalizado | Instalación + configuración Prometheus, Grafana + pruebas de estrés (Monitoraje), creación de la presentación y solución de errores |
 ---
 
 <img width="601" height="406" alt="image" src="https://github.com/user-attachments/assets/c4eeabe6-81db-4013-b231-5e2e168fb078" />
