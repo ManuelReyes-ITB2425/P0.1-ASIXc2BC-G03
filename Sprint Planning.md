@@ -221,14 +221,8 @@ El día de hoy nos centraremos en dejar cerrado todo el proyecto y terminar la p
 * **Víctor:** Puliendo la presentación.
 * **Aritz:** Realizará el pulido final del Proofhub y revisará errores.
 
-* ### 🚀 Resumen de Sprints
-| Sprint | Estado | Enfoque |
-| :--- | :--- | :--- |
-| **Sprint 1** | ✅ Finalizado | Arquitectura base. |
-| **Sprint 2** | ✅ Finalizado | Docker, AWS y Documentación. |
-| **Sprint 3** | ✅ Finalizado | Documentación final, Testing y Presentación. |
-| **Sprint 4** | ✅ Finalizado | Hardening S.O, BBDD y WEB + Firewall |
-| **Sprint 5** | ✅ Finalizado | Instalación + configuración Prometheus, Grafana (Monitoraje) |
+
+<img width="601" height="406" alt="image" src="https://github.com/user-attachments/assets/c4eeabe6-81db-4013-b231-5e2e168fb078" />
 ---
 
 ### 🚀 Resumen de Sprints
@@ -240,6 +234,4 @@ El día de hoy nos centraremos en dejar cerrado todo el proyecto y terminar la p
 | **Sprint 4** | ✅ Finalizado | Hardening S.O, BBDD y WEB + Firewall |
 | **Sprint 5** | ✅ Finalizado | Instalación + configuración Prometheus, Grafana + pruebas de estrés (Monitoraje), creación de la presentación y solución de errores |
 ---
-
-<img width="601" height="406" alt="image" src="https://github.com/user-attachments/assets/c4eeabe6-81db-4013-b231-5e2e168fb078" />
 
