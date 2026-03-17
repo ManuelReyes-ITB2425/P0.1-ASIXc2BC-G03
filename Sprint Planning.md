@@ -131,7 +131,7 @@ Registro de actividades correspondiente a la fase inicial del proyecto.
 | **Sprint 2** | ✅ Finalizado | Docker, AWS y Documentación. |
 | **Sprint 3** | 🏁 Finalizado | Documentación final, Testing y Presentación. |
 
-# Registro de Seguimiento del Proyecto
+# 🚀 Sprint 4:
 
 ## 17/02/2026
 Hoy hemos realizado la revisión del proyecto 01 con **David Sicart**. Tras realizar la revisión, hemos revisado el proyecto 02 y comenzado a asignarnos tareas y a organizarnos.
@@ -164,7 +164,15 @@ Hoy es el último día del Sprint; ya tenemos casi todo realizado, solo nos qued
 
 <img width="602" height="264" alt="image" src="https://github.com/user-attachments/assets/36c7ac5d-61a1-4ca4-a629-f42febc02d58" />
 
-## Sprint 5
+### 🚀 Resumen de Sprints
+| Sprint | Estado | Enfoque |
+| :--- | :--- | :--- |
+| **Sprint 1** | ✅ Finalizado | Arquitectura base. |
+| **Sprint 2** | ✅ Finalizado | Docker, AWS y Documentación. |
+| **Sprint 3** | ✅ Finalizado | Documentación final, Testing y Presentación. |
+| **Sprint 4** | ✅ Finalizado | Hardening S.O, BBDD y WEB + Firewall |
+
+# 🚀 Sprint 5
 
 ## 📅 Marzo 2026
 
@@ -186,14 +194,22 @@ El día de hoy proseguiremos con la instalación de los 2 servicios (Grafana y P
 
 <img width="601" height="486" alt="image" src="https://github.com/user-attachments/assets/9331e1fd-4747-4960-91b2-3a8440700a93" />
 
+### 🚀 Resumen de Sprints
+| Sprint | Estado | Enfoque |
+| :--- | :--- | :--- |
+| **Sprint 1** | ✅ Finalizado | Arquitectura base. |
+| **Sprint 2** | ✅ Finalizado | Docker, AWS y Documentación. |
+| **Sprint 3** | ✅ Finalizado | Documentación final, Testing y Presentación. |
+| **Sprint 4** | ✅ Finalizado | Hardening S.O, BBDD y WEB + Firewall |
+| **Sprint 5** | ✅ Finalizado | Instalación + configuración Prometheus, Grafana (Monitoraje) |
 ---
 
-## Sprint 6
+# 🚀 Sprint 6
 
 ### 10/03/2026:
 El día de hoy realizaremos la documentación de lo realizado en los días anteriores y revisaremos cada servicio que tenemos debido a que hemos experimentado problemas con alguno de estos, en caso de que haya un problema trataremos de resolverlo.
 
-* **Manuel:** Revisará algunos servicios que están dando problemas (web) y realizará la presentación que tendremos que hacer en un par de días.
+* **Manuel:** Revisará algunos servicios que están dando problemas (web) y realizará la presentación que tendremos que hacer en un par de días aparte de las pruebas de estrés.
 * **Aleix:** Revisará algunos errores que tenemos con la base de datos.
 * **Aritz:** Realizará la documentación del Prometheus y Grafana aparte de los Sprints plannings.
 
@@ -216,6 +232,17 @@ El día de hoy nos centraremos en dejar cerrado todo el proyecto y terminar la p
 * **Aleix:** Puliendo la presentación.
 * **Víctor:** Puliendo la presentación.
 * **Aritz:** Realizará el pulido final del Proofhub y revisará errores.
+
+* ### 🚀 Resumen de Sprints
+| Sprint | Estado | Enfoque |
+| :--- | :--- | :--- |
+| **Sprint 1** | ✅ Finalizado | Arquitectura base. |
+| **Sprint 2** | ✅ Finalizado | Docker, AWS y Documentación. |
+| **Sprint 3** | ✅ Finalizado | Documentación final, Testing y Presentación. |
+| **Sprint 4** | ✅ Finalizado | Hardening S.O, BBDD y WEB + Firewall |
+| **Sprint 5** | ✅ Finalizado | Instalación + configuración Prometheus, Grafana (Monitoraje) |
+| **Sprint 6** | ✅ Finalizado | Documentación (Grafana, pruebas de estrés) y presentación + resolución de problemas |
+---
 
 <img width="601" height="406" alt="image" src="https://github.com/user-attachments/assets/c4eeabe6-81db-4013-b231-5e2e168fb078" />
 
