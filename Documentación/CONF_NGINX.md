@@ -133,7 +133,6 @@ Podemos comprobar, que cada vez que reinciamos los contenedores, hay ocasiones q
 <img width="512" height="125" alt="image" src="https://github.com/user-attachments/assets/dcdd38e5-9e7c-4457-a885-198cb1bc8b09" />
 
 # Securizando Nginx
-Aquí tienes el contenido formateado en Markdown, limpio y estructurado con bloques de código, tablas y negritas para mejorar la legibilidad en tu `README.md` o documentación.
 
 ***
 
