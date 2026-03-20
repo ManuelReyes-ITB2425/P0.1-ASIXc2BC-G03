@@ -33,7 +33,7 @@ Evalua el comportamiento del sistema en operaciones de gran consumo de recursos 
 
 ### Codigo utilizado:
 
-**Configuración del ataque inicial (Perfil Moderado):**
+**Configuración del ataque inicial:**
 * Peticiones `HTTP GET` continuas simulando lectura de usuarios humanos con un *sleep* dinámico (entre 1 y 3 segundos).
 * **Perfil de carga:** Subida progresiva a **50 usuarios concurrentes (VUs)** en 30 segundos, mantenimiento del tráfico durante 2 minutos y bajada final a 0.
 * **Criterios de éxito (Thresholds):** Tasa de fallo inferior al 5% y percentil p95 de respuesta por debajo de los 1.5 segundos.
@@ -77,7 +77,7 @@ export default function () {
 }
 ````
 
-**Configuración del ataque (Perfil Spike Testing):**
+**Configuración del ataque con 400 usuarios:**
 * Petición `HTTP GET` agresiva hacia la aplicación PHP con un tiempo de espera muy reducido (entre 0.5 y 1 segundo).
 * Uso de `discardResponseBodies: true` para optimizar el consumo de memoria en la máquina atacante.
 * **Carga extrema:** Escalado progresivo hasta alcanzar un máximo de **400 usuarios virtuales concurrentes (VUs)**.
@@ -132,11 +132,6 @@ export default function () {
 **Objetivo:**
 Establecer una línea base de rendimiento y evaluar el comportamiento inicial del sistema frente a un nivel de tráfico moderado-alto, simulando 50 usuarios recurrentes interactuando directamente con el contenido dinámico de la aplicación (`extagram.php`).
 
-**Configuración del ataque inicial (Perfil Moderado):**
-* Peticiones `HTTP GET` continuas simulando lectura de usuarios humanos con un *sleep* dinámico (entre 1 y 3 segundos).
-* **Perfil de carga:** Subida progresiva a **50 usuarios concurrentes (VUs)** en 30 segundos, mantenimiento del tráfico durante 2 minutos y bajada final a 0.
-* **Criterios de éxito (Thresholds):** Tasa de fallo inferior al 5% y percentil p95 de respuesta por debajo de los 1.5 segundos.
-  
 ### 1º ataque
 
 <img width="850" height="822" alt="image" src="https://github.com/user-attachments/assets/e66eae08-2a1d-4000-b0ca-64d97fc80bf7" />
@@ -157,8 +152,8 @@ Se ejecutó la misma prueba en dos iteraciones consecutivas, obteniendo resultad
 3. **Conclusión Preliminar:** Estos primeros resultados revelaron de forma temprana que 50 usuarios concurrentes constantes superan el límite de hilos preconfigurado en el *pool* de `php-fpm` (contenedores `s2_app` y `s3_app`). Al enrutar el tráfico mediante el proxy (S1), este se ve obligado a cortar las conexiones cuando los nodos traseros no dan abasto, confirmando la necesidad de ampliar las réplicas antes de abrir el servicio a un público masivo.
 
 ### 3º ataque (+400 usuarios)
-
-Simular un escenario de tráfico masivo (equivalente a un ataque DoS de Capa 7 o un pico extremo de viralidad) solicitando de manera agresiva y concurrente el contenido dinámico base (extagram.php). El objetivo era llevar la infraestructura al límite para encontrar el punto exacto de ruptura  de los nodos backend (s2_app y s3_app) y evaluar el comportamiento de la red y el proxy.
+**Objetivo:**
+Simular un escenario de tráfico masivo solicitando de manera agresiva y concurrente el contenido dinámico base (extagram.php). El objetivo era llevar la infraestructura al límite para encontrar el punto exacto de ruptura  de los nodos backend (s2_app y s3_app) y evaluar el comportamiento de la red y el proxy.
 
 <img width="867" height="698" alt="image" src="https://github.com/user-attachments/assets/078e3c3a-349d-4b03-80f9-ddee35d859ce" />
 
@@ -173,3 +168,27 @@ El informe final generado por *Grafana k6* tras los 3 minutos de ejecución demu
 
 # Conclusión final
 La caída prematura con solo 50 usuarios se explica por un límite de software y no de hardware. La imagen base de php-fpm de Docker utiliza un valor de pm.max_children muy restrictivo por defecto para ahorrar RAM. El proxy Nginx devolvía errores 503 rápidamente (timeouts) porque no tenía contenedores backend libres, a pesar de que la instancia de AWS estaba lejos de alcanzar el 100% de CPU.
+
+## Análisis Visual de Rendimiento en el Dashboard de Grafana
+
+Durante la ejecución de las pruebas de estrés, se utilizó el sistema de monitorización centralizado (Prometheus + Grafana + cAdvisor) para observar el comportamiento físico de los contenedores y de la red en tiempo real. Este panel ha permitido extraer las siguientes conclusiones clave:
+
+<img width="1086" height="572" alt="image" src="https://github.com/user-attachments/assets/10fd5d40-0692-4bdd-aaa4-3516a7cf53da" />
+
+<img width="736" height="507" alt="image" src="https://github.com/user-attachments/assets/ee82a0e6-090a-401e-8a59-4e177c0b03db" />
+
+### 1. Comportamiento del Tráfico de Red (Network Traffic)
+La gráfica de tráfico de red ilustra claramente el inicio y el final de una de las subidas de carga generadas por k6. 
+* Se observa una expansión simétrica: el tráfico de entrada (verde) alcanza un pico de **más de 512 KiB/s**, solicitando masivamente las vistas dinámicas.
+* Correlativamente, el tráfico de salida (rojo) alcanza picos idénticos (aprox. -512 KiB/s) retornando el peso del código HTML renderizado. 
+* La caída abrupta a 0 a la mitad de la gráfica evidencia el fin de la prueba (*Ramp-down*) y cómo el entorno recupera el estado de reposo de forma instantánea sin sufrir bloqueos estructurales de red.
+
+### 2. Uso de Memoria por Contenedor (Memory Usage)
+Esta gráfica es la prueba  de la correcta segregación de servicios establecida en el `docker-compose.yml`:
+* **Servicios Core (Amarillo y Marrón oscuro):** Grafana (`123.50 MiB`) y Prometheus (`78.37 MiB`) son los servicios que más memoria RAM constante consumen debido a su procesamiento interno de métricas. 
+* **La Base de Datos (Rojo superior - `s7_db`):** La franja roja en la parte superior de la gráfica, correspondiente a MariaDB (`60.68 MiB`), experimenta un ligero abombamiento hacia arriba precisamente durante la ventana temporal de carga (16:42 - 16:44). Esto demuestra visualmente el impacto del estrés generado por las miles de consultas `SELECT` concurrentes por parte de los usuarios virtuales.
+* **Los Procesadores PHP (Lilas y Verdes):** Es destacable la ligereza de la arquitectura. Los contenedores encargados de la carga fuerte de trabajo, `s2_app`, `s3_app` y `s4_upload`, se mantienen a duras penas sobre los **7.80 MiB** de RAM cada uno a pesar de recibir cientos de peticiones por segundo. Aunque después sin comenzaron a tener picos. 
+
+
+
+
