@@ -181,7 +181,7 @@ Durante la ejecución de las pruebas de estrés, se utilizó el sistema de monit
 La gráfica de tráfico de red ilustra claramente el inicio y el final de una de las subidas de carga generadas por k6. 
 * Se observa una expansión simétrica: el tráfico de entrada (verde) alcanza un pico de **más de 512 KiB/s**, solicitando masivamente las vistas dinámicas.
 * Correlativamente, el tráfico de salida (rojo) alcanza picos idénticos (aprox. -512 KiB/s) retornando el peso del código HTML renderizado. 
-* La caída abrupta a 0 a la mitad de la gráfica evidencia el fin de la prueba (*Ramp-down*) y cómo el entorno recupera el estado de reposo de forma instantánea sin sufrir bloqueos estructurales de red.
+* La caída abrupta a 0 a la mitad de la gráfica evidencia el fin de la prueba y cómo el entorno recupera el estado de reposo de forma instantánea sin sufrir bloqueos estructurales de red.
 
 ### 2. Uso de Memoria por Contenedor (Memory Usage)
 Esta gráfica es la prueba  de la correcta segregación de servicios establecida en el `docker-compose.yml`:
