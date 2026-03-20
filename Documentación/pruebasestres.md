@@ -27,10 +27,11 @@ Esto ayuda a saber si tu sistema **soportará muchos usuarios reales**.
 ---
 
 ## Prueba de estrés realizada
+se han realizado dos pruebas de estrés utilizando la herramienta Grafana k6 ejecutada desde un entorno aislado con Kali Linux. Las pruebas se han diseñado con diferentes perfiles de carga (Load Profiles) para simular comportamientos de usuarios reales y ataques de saturación.
+
+Evalua el comportamiento del sistema en operaciones de gran consumo de recursos (subida de imágenes), donde intervienen el proxy S1 (Nginx), el procesamiento PHP y la escritura en disco en el contenedor específico s4_upload,
 
 <img width="867" height="698" alt="image" src="https://github.com/user-attachments/assets/5c8fb2da-dae9-4568-ab0c-1493b2071d66" />
-
-<img width="867" height="698" alt="image" src="https://github.com/user-attachments/assets/8af0ac34-37f3-401f-b808-89b3869156c7" />
 
 ---
 
