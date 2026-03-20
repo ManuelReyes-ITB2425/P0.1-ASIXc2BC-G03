@@ -31,7 +31,91 @@ se han realizado dos pruebas de estrés utilizando la herramienta Grafana k6 eje
 
 Evalua el comportamiento del sistema en operaciones de gran consumo de recursos (subida de imágenes), donde intervienen el proxy S1 (Nginx), el procesamiento PHP y la escritura en disco en el contenedor específico s4_upload,
 
-<img width="867" height="698" alt="image" src="https://github.com/user-attachments/assets/5c8fb2da-dae9-4568-ab0c-1493b2071d66" />
+### Codigo utilizado:
+
+primer codi:
+````bash
+import http from 'k6/http';
+import { check, sleep } from 'k6';
+
+// 1. Configuración de la carga extrema
+export const options = {
+  // AHORRO DE MEMORIA: Le dice a k6 que no guarde el HTML en la RAM local, 
+  // permitiendo simular muchos más usuarios sin que tu Kali se cuelgue.
+  discardResponseBodies: true,
+  
+  stages: [
+    { duration: '30s', target: 100 }, // Rampa rápida a 100 usuarios
+    { duration: '1m', target: 200 },  // Rampa a 200 usuarios (Aquí Nginx empezará a sufrir)
+    { duration: '1m', target: 400 },  // El latigazo final: 400 usuarios concurrentes
+    { duration: '30s', target: 0 },   // Bajada rápida para ver cómo recupera el servidor
+  ],
+  
+  thresholds: {
+    http_req_failed: ['rate<0.05'],     // Menos del 5% de error
+    http_req_duration: ['p(95)<1500'],  // El 95% en menos de 1.5s
+  },
+};
+
+// 2. Comportamiento del Usuario Virtual
+export default function () {
+  const res = http.get('http://35.169.177.227/extagram.php');
+
+  check(res, {
+    'Web responde 200 OK': (r) => r.status === 200,
+    'Carga en menos de 2 seg': (r) => r.timings.duration < 2000,
+  });
+
+  // Hemos reducido el tiempo de "lectura" para que ataquen más rápido.
+  // Ahora recargan la página casi instantáneamente (entre 0.5s y 1s).
+  sleep(Math.random() * 0.5 + 0.5); 
+}
+````
+
+
+segon codi:
+
+````bash
+mport http from 'k6/http';
+import { check, sleep } from 'k6';
+
+// 1. Cargamos el archivo en la memoria de k6 (fuera de la función default)
+// El parámetro 'b' indica que es un archivo binario.
+const imgFile = open('./imagen_test.jpg', 'b');
+
+export const options = {
+  stages: [
+    { duration: '30s', target: 20 }, // Subimos a 20 usuarios (subir archivos consume mucho, empezamos suave)
+    { duration: '1m', target: 20 },  // Mantenemos 20 usuarios
+    { duration: '30s', target: 0 },  // Bajamos a 0
+  ],
+  thresholds: {
+    http_req_failed: ['rate<0.10'], // Permitimos hasta un 10% de error (subir fotos satura rápido)
+  },
+};
+
+export default function () {
+  // 2. Preparamos el formulario (Payload)
+  // IMPORTANTE: Los nombres de los campos deben coincidir con lo que espera tu 'upload.php'
+  // Según el código de extagram, espera un input text llamado 'post' y un input file llamado 'photo'
+  const formData = {
+    post: 'Esta es una foto de prueba subida por k6',
+    photo: http.file(imgFile, 'imagen_test.jpg', 'image/jpeg'),
+  };
+
+  // 3. Hacemos el POST al script que procesa la subida (s4_upload)
+  const res = http.post('http://TU_IP_PUBLICA_AWS/upload.php', formData);
+
+  // 4. Comprobamos que el servidor haya respondido bien
+  check(res, {
+    'Subida correcta (Redirección o 200)': (r) => r.status === 200 || r.status === 302,
+  });
+
+  // Esperamos 2 segundos entre subida y subida para no colapsar la red de AWS al instante
+  sleep(2); 
+}
+````
+
 
 ---
 
